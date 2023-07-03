@@ -25,7 +25,7 @@ namespace FileWorxClient
 
         private void userToolStripMenuItem_Click(object sender, EventArgs e)
         {
-          //Handle Exception
+          
             var form3 = new newUserForm();
             form3.Show();
 
@@ -35,7 +35,7 @@ namespace FileWorxClient
 
         private void newsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Handle Exception
+           
             var form4 = new newNewsForm();
             form4.Show();
         }
@@ -49,7 +49,7 @@ namespace FileWorxClient
 
         private void photoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Handle Exception
+            
             var form6 = new Form6();
             form6.Show();
         }
