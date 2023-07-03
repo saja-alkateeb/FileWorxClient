@@ -12,13 +12,19 @@ using System.Windows.Controls;
 
 namespace FileWorxClient
 {
-    /* Make sure
+    /* Before submission ,make sure that you did this :
       1-Handle Exception
       2-Comments
-      3-Naming(Pascal,Camel Case)
-      4-Consistancy
+      3-Naming(Pascal case,Camel case)
+      4-Consistancy,easy to use
+      5-Complexity
+      6 -Access modifier(public,private,protected,internal)
+      7-Clean Code
+      8-Good Design 
+      9-Correct Functionality
+      10-Error message
      */
-    
+
     public partial class loginForm : Form
     {
         string dataPath = @"c:\saja\AdminInfo.txt";

@@ -22,6 +22,7 @@ namespace FileWorxClient
 
         private void userToolStripMenuItem_Click(object sender, EventArgs e)
         {
+          //Handle Exception
             var form3 = new newUserForm();
             form3.Show();
 
@@ -31,6 +32,7 @@ namespace FileWorxClient
 
         private void newsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //Handle Exception
             var form4 = new newNewsForm();
             form4.Show();
         }
@@ -44,8 +46,9 @@ namespace FileWorxClient
 
         private void photoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form5 = new newPhotosForm();
-            form5.Show();
+            //Handle Exception
+            var form6 = new Form6();
+            form6.Show();
         }
 
         private void mainForm_Load(object sender, EventArgs e)
@@ -118,7 +121,7 @@ namespace FileWorxClient
 
         private void usersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            /************************************************/
             //Admin's permission
 
             string usersFolderPath = "C:\\saja\\Users";
@@ -129,16 +132,10 @@ namespace FileWorxClient
                 {
                     string serializedUser = File.ReadAllText(filePath);
                     string[] userAttributes = serializedUser.Split('#');
-
-
-
                     string fullName = userAttributes[0];
                     string username = userAttributes[1];
                     string password = userAttributes[2];
                     string lastModifier = userAttributes[3];
-
-
-
                     richTextBox1.AppendText($"Full Name: {fullName}{Environment.NewLine}Username: {username}{Environment.NewLine}Password: {password}{Environment.NewLine}Last Modifier: {lastModifier}{Environment.NewLine}---------------------------------{Environment.NewLine}");
                 }
             }

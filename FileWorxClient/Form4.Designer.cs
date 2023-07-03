@@ -139,7 +139,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(696, 596);
+            this.ClientSize = new System.Drawing.Size(537, 596);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.cancleButton);
             this.Controls.Add(this.saveButton);
