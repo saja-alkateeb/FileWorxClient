@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using static FileWorxClient.loginForm;
+using static FileWorxClient.newUserForm;
+using static FileWorxClient.newNewsForm;
+using static FileWorxClient.Form6;
 
 namespace FileWorxClient
 {
@@ -117,32 +120,39 @@ namespace FileWorxClient
 
                 }
             }
+            comboBox1.Enabled = false;
         }
 
         private void usersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /************************************************/
             //Admin's permission
-
-            string usersFolderPath = "C:\\saja\\Users";
-            if (Directory.Exists(usersFolderPath))
+            Admin admin2 = new Admin();
+            if (admin2.UserName == "Saja" && admin2.Password == "2000")
             {
-                string[] userFiles = Directory.GetFiles(usersFolderPath, "*.txt");
-                foreach (string filePath in userFiles)
+                string usersFolderPath = "C:\\saja\\Users";
+                if (Directory.Exists(usersFolderPath))
                 {
-                    string serializedUser = File.ReadAllText(filePath);
-                    string[] userAttributes = serializedUser.Split('#');
-                    string fullName = userAttributes[0];
-                    string username = userAttributes[1];
-                    string password = userAttributes[2];
-                    string lastModifier = userAttributes[3];
-                    richTextBox1.AppendText($"Full Name: {fullName}{Environment.NewLine}Username: {username}{Environment.NewLine}Password: {password}{Environment.NewLine}Last Modifier: {lastModifier}{Environment.NewLine}---------------------------------{Environment.NewLine}");
+                    string[] userFiles = Directory.GetFiles(usersFolderPath, "*.txt");
+                    foreach (string filePath in userFiles)
+                    {
+                        string serializedUser = File.ReadAllText(filePath);
+                        string[] userAttributes = serializedUser.Split('#');
+                        string fullName = userAttributes[0];
+                        string username = userAttributes[1];
+                        string password = userAttributes[2];
+                        string lastModifier = userAttributes[3];
+                        richTextBox1.AppendText($"Full Name: {fullName}{Environment.NewLine}Username: {username}{Environment.NewLine}Password: {password}{Environment.NewLine}Last Modifier: {lastModifier}{Environment.NewLine}---------------------------------{Environment.NewLine}");
+                    }
                 }
+                txtTitle.Enabled = false;
+                txtDate.Enabled = false;
+                comboBox1.Enabled = false;
             }
-            //Normal User
-            /*
-            usersToolStripMenuItem.Enabled = false;
-            */
+            //normal user
+            else
+            {
+                usersToolStripMenuItem.Enabled = false;
+            }
 
         }
 

@@ -149,8 +149,8 @@
         private System.Windows.Forms.Button LogInbutton;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        internal System.Windows.Forms.TextBox txtUsername;
-        internal System.Windows.Forms.TextBox txtPassword;
+        public System.Windows.Forms.TextBox txtUsername;
+        public System.Windows.Forms.TextBox txtPassword;
     }
 }
 

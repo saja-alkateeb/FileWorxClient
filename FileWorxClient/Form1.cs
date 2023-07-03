@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Controls;
+using System.CodeDom;
 
 namespace FileWorxClient
 {
@@ -28,7 +29,7 @@ namespace FileWorxClient
     public partial class loginForm : Form
     {
         string dataPath = @"c:\saja\AdminInfo.txt";
-        string usersFolderPath = "C:\\saja\\Users";
+        string usersFolderPath = @"c:\saja\Users";
         public loginForm()
         {
             InitializeComponent();
@@ -38,7 +39,7 @@ namespace FileWorxClient
         {
             string username = txtUsername.Text;
             string password = txtPassword.Text;
-            //Admin admin = new Admin(username, password);
+            Admin admin = new Admin(username, password);
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) )
             {
                 MessageBox.Show("Please enter all the required information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -49,8 +50,8 @@ namespace FileWorxClient
                 MessageBox.Show("Login successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 
-                this.Close();
-                //this.Hide();
+                
+                this.Hide();
                 mainForm mainForm = new mainForm();
                 mainForm.Show();
              
@@ -61,7 +62,7 @@ namespace FileWorxClient
 
             }
         }
-        public bool IsLoginValid(string Username, string Password)
+        private bool IsLoginValid(string Username, string Password)
         {
             if (!File.Exists(dataPath))
                 return false;
@@ -77,8 +78,9 @@ namespace FileWorxClient
                     if (storedUsername == "Saja" && storedPassword == "2000")
                         return true;
                 }
-         //normal Users
-            if (File.Exists(usersFolderPath))
+         //Normal Users
+         
+            if (Directory.Exists(usersFolderPath))
             {
                 string[] userFiles = Directory.GetFiles(usersFolderPath, "*.txt");
                 foreach (string filePath in userFiles)
@@ -93,15 +95,20 @@ namespace FileWorxClient
 
                 }
             }
-
+         
+         
                 return false;
             
             
         }
-        /*public class Admin
+        public class Admin
         {
             public string UserName { get; set; }
             public string Password { get; set; }
+            public Admin()
+            {
+                    
+            }
             public Admin(string userName,string password)
             {
                 this.UserName = userName;
@@ -109,7 +116,7 @@ namespace FileWorxClient
                     
             }
 
-        }*/
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
