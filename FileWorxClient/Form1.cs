@@ -29,7 +29,7 @@ namespace FileWorxClient
     public partial class loginForm : Form
     {
         string dataPath = @"c:\saja\AdminInfo.txt";
-        string usersFolderPath = @"c:\saja\Users";
+        string usersFolderPath = @"c:\saja\Admin.txt";
         public loginForm()
         {
             InitializeComponent();

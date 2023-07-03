@@ -20,7 +20,7 @@ namespace FileWorxClient
         public newNewsForm()
         {
             InitializeComponent();
-            newsFolderPath = Path.Combine("@\"c:\\saja\\News");
+            newsFolderPath =  @"c:\saja\News"; 
         }
 
         private void cancleButton_Click(object sender, EventArgs e)
@@ -30,8 +30,7 @@ namespace FileWorxClient
             comboBoxCategory.SelectedItem= string.Empty;
             richTextBox1.Clear();
             this.Close();
-            mainForm mainform = new mainForm();
-            mainform.Show();
+         
 
         }
 
@@ -39,6 +38,10 @@ namespace FileWorxClient
         {
             string title = txtTitle.Text;
             string description = txtDescription.Text;
+            comboBoxCategory.Items.Add("Genera");
+            comboBoxCategory.Items.Add("Sports");
+            comboBoxCategory.Items.Add("Health");
+            comboBoxCategory.Items.Add("Politics");
             string category = comboBoxCategory.SelectedItem.ToString();
             string body = richTextBox1.ToString();
             DateTime creationDate = DateTime.Now;
@@ -70,8 +73,9 @@ namespace FileWorxClient
                 MessageBox.Show("News created and saved successfully!");
                 txtTitle.Text = string.Empty;
                 txtDescription.Text = string.Empty;
-                comboBoxCategory.SelectedItem = string.Empty;
+                comboBoxCategory.Text = string.Empty;   
                 richTextBox1.Clear();
+                this.Close();
             }
             catch (Exception ex)
             {

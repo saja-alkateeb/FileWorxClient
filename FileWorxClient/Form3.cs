@@ -18,7 +18,7 @@ namespace FileWorxClient
         public newUserForm()
         {
             InitializeComponent();
-            usersFolderPath = Path.Combine("@\"c:\\saja\\Users");
+            usersFolderPath = @"c:\saja\Users";
         }
 
         private void cancleButton_Click(object sender, EventArgs e)

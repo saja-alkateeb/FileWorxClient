@@ -18,7 +18,7 @@ namespace FileWorxClient
         public Form6()
         {
             InitializeComponent();
-            Path.Combine("@\"c:\\saja\\Photos");
+            photoFolderPath=@"c:\saja\Photoss";
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -59,6 +59,7 @@ namespace FileWorxClient
                 txtDescription.Text = string.Empty;
                 txtLocation.Text = string.Empty;
                 richTextBox1.Clear();
+                this.Close();
             }
             catch (Exception ex)
             {
@@ -74,8 +75,7 @@ namespace FileWorxClient
             richTextBox1.Clear();
             this.Close();
             //this.Hide();
-            mainForm mainform = new mainForm();
-            mainform.Show();
+          
         }
         public class Photos
         {
