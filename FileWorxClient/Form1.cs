@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Controls;
 using System.CodeDom;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace FileWorxClient
 {
@@ -72,10 +73,10 @@ namespace FileWorxClient
          //Admin
                 foreach (string line in lines)
                 {
-                    string[] parts = line.Split('#');
+                    string[] parts = line.Split(' ');
                     string storedUsername = parts[0].Trim();
                     string storedPassword = parts[1].Trim();
-                    if (storedUsername == "Saja" && storedPassword == "2000")
+                    if (parts.Length == 3 && parts[0] == "Saja" && parts[1] == "2000")
                         return true;
                 }
          //Normal Users

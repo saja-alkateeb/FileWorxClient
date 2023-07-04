@@ -87,20 +87,28 @@ namespace FileWorxClient
         private void newsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             string newsFolderPath = "C:\\saja\\News";
-            if (Directory.Exists(newsFolderPath))
-            {
-                string[] newsFiles = Directory.GetFiles(newsFolderPath, "*.txt");
-                foreach (string filePath in newsFiles)
+            
+                if (Directory.Exists(newsFolderPath))
                 {
-                    string serializedNews = File.ReadAllText(filePath);
-                    string[] newsAttributes = serializedNews.Split('#');
-                    string title = newsAttributes[0];
-                    DateTime creationDate = DateTime.Parse(newsAttributes[1]);
-                    string description = newsAttributes[2];
-                    richTextBox1.AppendText($"Title: {title}{Environment.NewLine}Creation Date: {creationDate}{Environment.NewLine}Description: {description}{Environment.NewLine}---------------------------------{Environment.NewLine}");
+                    string[] newsFiles = Directory.GetFiles(newsFolderPath, "*.txt");
+
+                    foreach (string filePath in newsFiles)
+                    {
+                        string serializedNews = File.ReadAllText(filePath);
+                        string[] newsAttributes = serializedNews.Split('#');
+                        string title = newsAttributes[0];
+                        DateTime creationDate = DateTime.Parse(newsAttributes[1]);
+                        string description = newsAttributes[2];
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("Title");
+                        dt.Columns.Add("Creation Date");
+                        dt.Columns.Add("Description");
+                        dt.Rows.Add(new object[] { newsAttributes[0], newsAttributes[1], newsAttributes[2] });
+                        dataGridView1.DataSource = dt;
+                    }
 
                 }
-            }
+            
         }
 
         private void photosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -116,7 +124,12 @@ namespace FileWorxClient
                     string title = photosAttributes[0];
                     DateTime creationDate = DateTime.Parse(photosAttributes[1]);
                     string description = photosAttributes[2];
-                    richTextBox1.AppendText($"Title: {title}{Environment.NewLine}Creation Date: {creationDate}{Environment.NewLine}Description: {description}{Environment.NewLine}---------------------------------{Environment.NewLine}");
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add("Title");
+                    dt.Columns.Add("Creation Date");
+                    dt.Columns.Add("Description");
+                    dt.Rows.Add(new object[] { photosAttributes[0], photosAttributes[1], photosAttributes[2] });
+                    dataGridView1.DataSource = dt;
 
                 }
             }
@@ -141,7 +154,7 @@ namespace FileWorxClient
                         string username = userAttributes[1];
                         string password = userAttributes[2];
                         string lastModifier = userAttributes[3];
-                        richTextBox1.AppendText($"Full Name: {fullName}{Environment.NewLine}Username: {username}{Environment.NewLine}Password: {password}{Environment.NewLine}Last Modifier: {lastModifier}{Environment.NewLine}---------------------------------{Environment.NewLine}");
+                       // richTextBox1.AppendText($"Full Name: {fullName}{Environment.NewLine}Username: {username}{Environment.NewLine}Password: {password}{Environment.NewLine}Last Modifier: {lastModifier}{Environment.NewLine}---------------------------------{Environment.NewLine}");
                     }
                 }
                 txtTitle.Enabled = false;
