@@ -13,6 +13,7 @@ using System.CodeDom;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Net.NetworkInformation;
 
+
 namespace FileWorxClient
 {
     /* Before submission ,make sure that you did this :
@@ -31,13 +32,10 @@ namespace FileWorxClient
     public partial class loginForm : Form
     {
         string usersFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-       
         public loginForm()
         {
             InitializeComponent();
-
         }
-
         private void LogInbutton_Click(object sender, EventArgs e)
         {
             string username = txtUsername.Text;

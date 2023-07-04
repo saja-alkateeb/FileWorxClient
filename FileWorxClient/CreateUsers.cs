@@ -29,7 +29,6 @@ namespace FileWorxClient
             txtUsername.Text = string.Empty;
             txtPassword.Text = string.Empty;
             this.Close();
-            
         }
 
         private void saveButton_Click(object sender, EventArgs e)
