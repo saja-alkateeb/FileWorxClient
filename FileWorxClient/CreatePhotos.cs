@@ -14,7 +14,7 @@ namespace FileWorxClient
 {
     public partial class CreatePhotos : Form
     {
-        string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        string photosFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
         public CreatePhotos()
         {
             InitializeComponent();
@@ -42,10 +42,10 @@ namespace FileWorxClient
             try
             {
                 string fileName = Guid.NewGuid().ToString();
-                string filePath = Path.Combine(folderPath, $"{fileName}.txt");
+                string filePath = Path.Combine(photosFolderPath, $"{fileName}.txt");
                 char separator = '#';
                 string data = $"{title}{separator}{creationDate}{separator}{description}{separator}{pictureLocation}{separator}{body}";
-                Directory.CreateDirectory(folderPath);
+                Directory.CreateDirectory(photosFolderPath);
                 File.WriteAllText(filePath, data);
                 MessageBox.Show("Photos created and saved successfully!");
                 txtTitle.Text = string.Empty;

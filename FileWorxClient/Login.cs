@@ -40,7 +40,6 @@ namespace FileWorxClient
 
         private void LogInbutton_Click(object sender, EventArgs e)
         {
-            //fullPath = Path.Combine(folderPath, dataPath);
             string username = txtUsername.Text;
             string password = txtPassword.Text;
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))

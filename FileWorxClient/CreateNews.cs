@@ -15,7 +15,7 @@ namespace FileWorxClient
 {
     public partial class newNewsForm :Form
     {
-        string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        String newsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
         public newNewsForm()
         {
@@ -58,10 +58,10 @@ namespace FileWorxClient
             try
             {
                 string fileName = Guid.NewGuid().ToString();
-                string filePath = Path.Combine(folderPath, $"{fileName}.txt");
+                string filePath = Path.Combine(newsFolderPath, $"{fileName}.txt");
                 char separator = '#';
                 string data = $"{title}{separator}{creationDate}{separator}{description}{separator}{category}{separator}{body}";
-                Directory.CreateDirectory(folderPath);
+                Directory.CreateDirectory(newsFolderPath);
                 File.WriteAllText(filePath, data);
                 MessageBox.Show("News created and saved successfully!");
                 txtTitle.Text = string.Empty;

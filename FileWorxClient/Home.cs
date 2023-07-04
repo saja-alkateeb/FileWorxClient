@@ -88,14 +88,14 @@ namespace FileWorxClient
 
         private void newsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            String newsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             DataTable dt = new DataTable();
             dt.Columns.Add("Title");
             dt.Columns.Add("Creation Date");
             dt.Columns.Add("Description");
-            if (Directory.Exists(folderPath))
+            if (Directory.Exists(newsFolderPath))
                 {
-                string[] newsFiles = Directory.GetFiles(folderPath, "*.txt");
+                string[] newsFiles = Directory.GetFiles(newsFolderPath, "*.txt");
                 foreach (string filePath in newsFiles)
                     {
                         string serializedNews = File.ReadAllText(filePath);
@@ -129,10 +129,10 @@ namespace FileWorxClient
             dt.Columns.Add("Title");
             dt.Columns.Add("Creation Date");
             dt.Columns.Add("Description");
-            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            if (Directory.Exists(folderPath))
+            string photosFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            if (Directory.Exists(photosFolderPath))
             {
-                string[] photosFiles = Directory.GetFiles(folderPath, "*.txt");
+                string[] photosFiles = Directory.GetFiles(photosFolderPath, "*.txt");
                 foreach (string filePath in photosFiles)
                 {
                     string serializedPhotos = File.ReadAllText(filePath);
