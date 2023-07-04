@@ -1,6 +1,6 @@
 ﻿namespace FileWorxClient
 {
-    partial class Form6
+    partial class CreatePhotos
     {
         /// <summary>
         /// Required designer variable.

@@ -15,12 +15,12 @@ namespace FileWorxClient
 {
     public partial class newNewsForm :Form
     {
-        private string newsFolderPath;
+        string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
         public newNewsForm()
         {
             InitializeComponent();
-            newsFolderPath =  @"c:\saja\News"; 
+            
         }
 
         private void cancleButton_Click(object sender, EventArgs e)
@@ -30,8 +30,6 @@ namespace FileWorxClient
             comboBoxCategory.SelectedItem= string.Empty;
             richTextBox1.Clear();
             this.Close();
-         
-
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -43,10 +41,10 @@ namespace FileWorxClient
             comboBoxCategory.Items.Add("Health");
             comboBoxCategory.Items.Add("Politics");
             string category = comboBoxCategory.SelectedItem.ToString();
-            string body = richTextBox1.ToString();
+            string body = richTextBox1.Text;
             DateTime creationDate = DateTime.Now;
             News news = new News(title, description, category, body, creationDate);
-            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(body))
+            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) ||string.IsNullOrEmpty(category) || string.IsNullOrEmpty(body))
             {
                 MessageBox.Show("Please enter all the required information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -60,16 +58,11 @@ namespace FileWorxClient
             try
             {
                 string fileName = Guid.NewGuid().ToString();
-
-                string filePath = Path.Combine(newsFolderPath, $"{fileName}.txt");
+                string filePath = Path.Combine(folderPath, $"{fileName}.txt");
                 char separator = '#';
                 string data = $"{title}{separator}{creationDate}{separator}{description}{separator}{category}{separator}{body}";
-                
-
-                Directory.CreateDirectory(newsFolderPath);
-
+                Directory.CreateDirectory(folderPath);
                 File.WriteAllText(filePath, data);
-
                 MessageBox.Show("News created and saved successfully!");
                 txtTitle.Text = string.Empty;
                 txtDescription.Text = string.Empty;

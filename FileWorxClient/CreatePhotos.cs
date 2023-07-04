@@ -12,13 +12,12 @@ using System.Windows.Forms;
 
 namespace FileWorxClient
 {
-    public partial class Form6 : Form
+    public partial class CreatePhotos : Form
     {
-        private string photoFolderPath;
-        public Form6()
+        string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        public CreatePhotos()
         {
             InitializeComponent();
-            photoFolderPath=@"c:\saja\Photoss";
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -43,17 +42,11 @@ namespace FileWorxClient
             try
             {
                 string fileName = Guid.NewGuid().ToString();
-
-                string filePath = Path.Combine(photoFolderPath, $"{fileName}.txt");
-
+                string filePath = Path.Combine(folderPath, $"{fileName}.txt");
                 char separator = '#';
-
                 string data = $"{title}{separator}{creationDate}{separator}{description}{separator}{pictureLocation}{separator}{body}";
-
-                Directory.CreateDirectory(photoFolderPath);
-
+                Directory.CreateDirectory(folderPath);
                 File.WriteAllText(filePath, data);
-
                 MessageBox.Show("Photos created and saved successfully!");
                 txtTitle.Text = string.Empty;
                 txtDescription.Text = string.Empty;

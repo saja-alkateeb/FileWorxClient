@@ -12,13 +12,15 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace FileWorxClient
 {
+   
     public partial class newUserForm:Form
     {
-        private string usersFolderPath;
+        string usersFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+     // string newFolder = "Users";
+     // string path = System.IO.Path.Combine( Environment.GetFolderPath(Environment.SpecialFolder.Desktop), newFolder);
         public newUserForm()
         {
             InitializeComponent();
-            usersFolderPath = @"c:\saja\Users";
         }
 
         private void cancleButton_Click(object sender, EventArgs e)
@@ -36,8 +38,6 @@ namespace FileWorxClient
             string username = txtUsername.Text;
             string password = txtPassword.Text;
             string lastModifier = Environment.UserName;
-            //User user = new User(fullName, username, password, lastModifier);
-
             if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Please enter all the required information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -54,16 +54,10 @@ namespace FileWorxClient
                 string fileName = Guid.NewGuid().ToString();
 
                 string filePath = Path.Combine(usersFolderPath, $"{fileName}.txt");
-
                 char separator = '#';
-
                 string data = $"{fullName}{separator}{username}{separator}{password}{separator}{lastModifier}";
-
                 Directory.CreateDirectory(usersFolderPath);
-
-
                 File.WriteAllText(filePath, data);
-
                 MessageBox.Show("User created and saved successfully!");
                 txtFullName.Text = string.Empty;
                 txtUsername.Text = string.Empty;
