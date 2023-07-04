@@ -87,8 +87,11 @@ namespace FileWorxClient
         private void newsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             string newsFolderPath = "C:\\saja\\News";
-            
-                if (Directory.Exists(newsFolderPath))
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Title");
+            dt.Columns.Add("Creation Date");
+            dt.Columns.Add("Description");
+            if (Directory.Exists(newsFolderPath))
                 {
                     string[] newsFiles = Directory.GetFiles(newsFolderPath, "*.txt");
 
@@ -99,10 +102,7 @@ namespace FileWorxClient
                         string title = newsAttributes[0];
                         DateTime creationDate = DateTime.Parse(newsAttributes[1]);
                         string description = newsAttributes[2];
-                        DataTable dt = new DataTable();
-                        dt.Columns.Add("Title");
-                        dt.Columns.Add("Creation Date");
-                        dt.Columns.Add("Description");
+                     
                         dt.Rows.Add(new object[] { newsAttributes[0], newsAttributes[1], newsAttributes[2] });
                         dataGridView1.DataSource = dt;
                     }
@@ -113,6 +113,10 @@ namespace FileWorxClient
 
         private void photosToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Title");
+            dt.Columns.Add("Creation Date");
+            dt.Columns.Add("Description");
             string photosFolderPath = "C:\\saja\\Photos";
             if (Directory.Exists(photosFolderPath))
             {
@@ -124,10 +128,6 @@ namespace FileWorxClient
                     string title = photosAttributes[0];
                     DateTime creationDate = DateTime.Parse(photosAttributes[1]);
                     string description = photosAttributes[2];
-                    DataTable dt = new DataTable();
-                    dt.Columns.Add("Title");
-                    dt.Columns.Add("Creation Date");
-                    dt.Columns.Add("Description");
                     dt.Rows.Add(new object[] { photosAttributes[0], photosAttributes[1], photosAttributes[2] });
                     dataGridView1.DataSource = dt;
 
