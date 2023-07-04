@@ -154,7 +154,13 @@ namespace FileWorxClient
                         string username = userAttributes[1];
                         string password = userAttributes[2];
                         string lastModifier = userAttributes[3];
-                       // richTextBox1.AppendText($"Full Name: {fullName}{Environment.NewLine}Username: {username}{Environment.NewLine}Password: {password}{Environment.NewLine}Last Modifier: {lastModifier}{Environment.NewLine}---------------------------------{Environment.NewLine}");
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("Full Name");
+                        dt.Columns.Add("Username");
+                        dt.Columns.Add("Password");
+                        dt.Columns.Add("last Modifier");
+                        dt.Rows.Add(new object[] { userAttributes[0], userAttributes[1], userAttributes[2], userAttributes[3] });
+                        dataGridView1.DataSource = dt;
                     }
                 }
                 txtTitle.Enabled = false;
