@@ -14,7 +14,7 @@ namespace FileWorxClient
 {
     public partial class CreatePhotos : Form
     {
-        string photosFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         public CreatePhotos()
         {
             InitializeComponent();
@@ -22,6 +22,8 @@ namespace FileWorxClient
 
         private void saveButton_Click(object sender, EventArgs e)
         {
+            string photosFolderPath = Path.Combine(desktopPath, "Photos");
+            Directory.CreateDirectory(photosFolderPath);
             string title = txtTitle.Text;
             string description = txtDescription.Text;
             string pictureLocation = txtLocation.Text;

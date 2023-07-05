@@ -15,9 +15,7 @@ namespace FileWorxClient
    
     public partial class newUserForm:Form
     {
-        string usersFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-     // string newFolder = "Users";
-     // string path = System.IO.Path.Combine( Environment.GetFolderPath(Environment.SpecialFolder.Desktop), newFolder);
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         public newUserForm()
         {
             InitializeComponent();
@@ -33,6 +31,8 @@ namespace FileWorxClient
 
         private void saveButton_Click(object sender, EventArgs e)
         {
+            string usersFolderPath = Path.Combine(desktopPath, "Users");
+            Directory.CreateDirectory(usersFolderPath);
             string fullName = txtFullName.Text;
             string username = txtUsername.Text;
             string password = txtPassword.Text;
@@ -55,7 +55,7 @@ namespace FileWorxClient
                 string filePath = Path.Combine(usersFolderPath, $"{fileName}.txt");
                 char separator = '#';
                 string data = $"{fullName}{separator}{username}{separator}{password}{separator}{lastModifier}";
-                Directory.CreateDirectory(usersFolderPath);
+               // Directory.CreateDirectory(usersFolderPath);
                 File.WriteAllText(filePath, data);
                 MessageBox.Show("User created and saved successfully!");
                 txtFullName.Text = string.Empty;

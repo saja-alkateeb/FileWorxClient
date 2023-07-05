@@ -15,7 +15,7 @@ namespace FileWorxClient
 {
     public partial class newNewsForm :Form
     {
-        String newsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
         public newNewsForm()
         {
@@ -34,6 +34,8 @@ namespace FileWorxClient
 
         private void saveButton_Click(object sender, EventArgs e)
         {
+            string newsFolderPath = Path.Combine(desktopPath, "News");
+            Directory.CreateDirectory(newsFolderPath);
             string title = txtTitle.Text;
             string description = txtDescription.Text;
             comboBoxCategory.Items.Add("Genera");

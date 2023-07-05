@@ -13,6 +13,7 @@ namespace FileWorxClient
 {
     public partial class ListUsers : Form
     {
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         public ListUsers()
         {
             InitializeComponent();
@@ -25,7 +26,8 @@ namespace FileWorxClient
 
         private void ListUsers_Load(object sender, EventArgs e)
         {
-            string usersFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            string usersFolderPath = Path.Combine(desktopPath, "Users");
+            Directory.CreateDirectory(usersFolderPath);
             DataTable dt = new DataTable();
             dt.Columns.Add("Full Name");
             dt.Columns.Add("Username");

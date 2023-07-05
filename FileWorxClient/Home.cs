@@ -18,6 +18,7 @@ namespace FileWorxClient
 {
     public partial class mainForm : Form
     {
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         public mainForm()
         {
             InitializeComponent();
@@ -88,7 +89,8 @@ namespace FileWorxClient
 
         private void newsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            String newsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+           string newsFolderPath = Path.Combine(desktopPath, "News");
+            Directory.CreateDirectory(newsFolderPath);
             DataTable dt = new DataTable();
             dt.Columns.Add("Title");
             dt.Columns.Add("Creation Date");
@@ -105,15 +107,16 @@ namespace FileWorxClient
                         string description = newsAttributes[2];
                     dt.Rows.Add(new object[] { title, creationDate, description });
                         dataGridView1.DataSource = dt;
-                    DataGridViewElementStates select = DataGridViewElementStates.Selected;
-                    bool Isselect = Convert.ToBoolean(DataGridViewElementStates.Selected);
-                    foreach (DataGridViewRow rows in dataGridView1.Rows)
-                    {
-                        if (Isselect)
-                        {
-                            richTextBox1.Text = newsAttributes[4];
-                        }
-                    }
+                     DataGridViewElementStates select = DataGridViewElementStates.Selected;
+                     bool Isselect = Convert.ToBoolean(DataGridViewElementStates.Selected);
+                     foreach (DataGridViewRow rows in dataGridView1.Rows)
+                     {
+                         if (Isselect)
+                         {
+                             richTextBox1.Text = newsAttributes[4];
+                         }
+                     }
+                    
                 }
 
 
@@ -125,11 +128,12 @@ namespace FileWorxClient
 
         private void photosToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string photosFolderPath = Path.Combine(desktopPath, "Photos");
+            Directory.CreateDirectory(photosFolderPath);
             DataTable dt = new DataTable();
             dt.Columns.Add("Title");
             dt.Columns.Add("Creation Date");
             dt.Columns.Add("Description");
-            string photosFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             if (Directory.Exists(photosFolderPath))
             {
                 string[] photosFiles = Directory.GetFiles(photosFolderPath, "*.txt");
@@ -169,10 +173,19 @@ namespace FileWorxClient
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewElementStates select = DataGridViewElementStates.Selected;
+            /*DataGridViewElementStates select = DataGridViewElementStates.Selected;
             if(select == DataGridViewElementStates.Selected)
             {
                 
+            }*/
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+
+                string title = selectedRow.Cells["Title"].Value.ToString();
+                string description = selectedRow.Cells["Description"].Value.ToString();
+                string category = selectedRow.Cells["Category"].Value.ToString();
+
             }
         }
 

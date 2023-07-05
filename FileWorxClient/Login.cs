@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.CodeDom;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Net.NetworkInformation;
+using static FileWorxClient.newNewsForm;
 
 
 namespace FileWorxClient
@@ -31,9 +32,13 @@ namespace FileWorxClient
 
     public partial class loginForm : Form
     {
-        string usersFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        string usersFolderPath;
         public loginForm()
         {
+             
+           usersFolderPath = Path.Combine(desktopPath, "Users");
+           
             InitializeComponent();
         }
         private void LogInbutton_Click(object sender, EventArgs e)
@@ -59,15 +64,16 @@ namespace FileWorxClient
         }
         private bool IsLoginValid(string Username, string Password)
         {
+            Directory.CreateDirectory(usersFolderPath);
             string usernames = txtUsername.Text;
             string passwords = txtPassword.Text;
-             if (!File.Exists(usersFolderPath))
+            if (!File.Exists(usersFolderPath))
                    return false;
                string[] lines = File.ReadAllLines(usersFolderPath);
                foreach (string line in lines)
                {
                    string[] parts = line.Split('#');
-                   if (parts[0] == usernames && parts[1] == passwords)
+                   if (parts[1] == usernames && parts[2] == passwords)
                    {
                        return true;
                    }
