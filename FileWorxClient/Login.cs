@@ -32,13 +32,12 @@ namespace FileWorxClient
 
     public partial class loginForm : Form
     {
+
         string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         string usersFolderPath;
         public loginForm()
         {
-             
            usersFolderPath = Path.Combine(desktopPath, "Users");
-           
             InitializeComponent();
         }
         private void LogInbutton_Click(object sender, EventArgs e)
@@ -64,20 +63,21 @@ namespace FileWorxClient
         }
         private bool IsLoginValid(string Username, string Password)
         {
-            Directory.CreateDirectory(usersFolderPath);
             string usernames = txtUsername.Text;
             string passwords = txtPassword.Text;
-            if (!File.Exists(usersFolderPath))
-                   return false;
-               string[] lines = File.ReadAllLines(usersFolderPath);
-               foreach (string line in lines)
-               {
-                   string[] parts = line.Split('#');
-                   if (parts[1] == usernames && parts[2] == passwords)
-                   {
-                       return true;
-                   }
-               }
+            if (Directory.Exists(usersFolderPath))
+            {
+                string[] userFiles = Directory.GetFiles(usersFolderPath, "*.txt");
+                foreach (string filePath in userFiles)
+                {
+                    string serializedUser = File.ReadAllText(filePath);
+                    string[] userAttributes = serializedUser.Split(new[] { "#%%%#" }, StringSplitOptions.None);
+                    if (userAttributes[1] == usernames && userAttributes[2] == passwords)
+                    {
+                        return true;
+                    }
+                }
+            }
           
             return false;
         }
@@ -102,7 +102,6 @@ namespace FileWorxClient
 
         private void loginForm_Load(object sender, EventArgs e)
         {
-
         }
     
     }

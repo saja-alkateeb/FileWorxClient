@@ -26,17 +26,12 @@ namespace FileWorxClient
 
         private void userToolStripMenuItem_Click(object sender, EventArgs e)
         {
-          
             var form3 = new newUserForm();
             form3.Show();
-
-
-
         }
 
         private void newsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           
             var form4 = new newNewsForm();
             form4.Show();
         }
@@ -50,20 +45,18 @@ namespace FileWorxClient
 
         private void photoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
             var form6 = new CreatePhotos();
             form6.Show();
         }
 
-        private void mainForm_Load(object sender, EventArgs e)
-        {
-            WindowState = FormWindowState.Maximized;
-            
-            
-        }
+        //private void mainForm_Load(object sender, EventArgs e)
+        //{
+        //    WindowState = FormWindowState.Maximized;
+        //    dataGridView1.Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom);
+        //}
 
         private void label1_Click(object sender, EventArgs e)
-        {
+        { 
 
         }
 
@@ -74,7 +67,7 @@ namespace FileWorxClient
 
         private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
         {
-            
+
         }
 
         private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
@@ -97,27 +90,21 @@ namespace FileWorxClient
             dt.Columns.Add("Description");
             if (Directory.Exists(newsFolderPath))
                 {
-                string[] newsFiles = Directory.GetFiles(newsFolderPath, "*.txt");
+                  string[] newsFiles = Directory.GetFiles(newsFolderPath, "*.txt");
                 foreach (string filePath in newsFiles)
-                    {
-                        string serializedNews = File.ReadAllText(filePath);
-                        string[] newsAttributes = serializedNews.Split('#');
-                        string title = newsAttributes[0];
-                        DateTime creationDate = DateTime.Parse(newsAttributes[1]);
-                        string description = newsAttributes[2];
+                {
+                    string serializedNews = File.ReadAllText(filePath);
+                    string[] newsAttributes = serializedNews.Split(new[] { "#%%%#" }, StringSplitOptions.None);
+                    string title = newsAttributes[0];
+                    DateTime creationDate = DateTime.Parse(newsAttributes[1]);
+                    string description = newsAttributes[2];
                     dt.Rows.Add(new object[] { title, creationDate, description });
-                        dataGridView1.DataSource = dt;
-                     DataGridViewElementStates select = DataGridViewElementStates.Selected;
-                     bool Isselect = Convert.ToBoolean(DataGridViewElementStates.Selected);
-                     foreach (DataGridViewRow rows in dataGridView1.Rows)
-                     {
-                         if (Isselect)
-                         {
-                             richTextBox1.Text = newsAttributes[4];
-                         }
-                     }
-                    
+                    dataGridView1.DataSource = dt;
+                   
                 }
+                
+                    
+                
 
 
                 }
@@ -140,13 +127,12 @@ namespace FileWorxClient
                 foreach (string filePath in photosFiles)
                 {
                     string serializedPhotos = File.ReadAllText(filePath);
-                    string[] photosAttributes = serializedPhotos.Split('#');
+                    string[] photosAttributes = serializedPhotos.Split(new[] { "#%%%#" }, StringSplitOptions.None);
                     string title = photosAttributes[0];
                     DateTime creationDate = DateTime.Parse(photosAttributes[1]);
                     string description = photosAttributes[2];
                     dt.Rows.Add(new object[] {title,creationDate,description});
                     dataGridView1.DataSource = dt;
-
                 }
             }
             comboBox1.Enabled = false;
@@ -162,8 +148,7 @@ namespace FileWorxClient
         {
             //delete to remove the object from the system.
             int selectedRowIndex = dataGridView1.CurrentCell.RowIndex;
-              dataGridView1.Rows.RemoveAt(selectedRowIndex);
-            
+            dataGridView1.Rows.RemoveAt(selectedRowIndex);
         }
 
         private void showToolStripMenuItem_Click(object sender, EventArgs e)
@@ -178,14 +163,31 @@ namespace FileWorxClient
             {
                 
             }*/
-            if (dataGridView1.SelectedRows.Count > 0)
-            {
-                DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+            /* if (dataGridView1.SelectedRows.Count > 0)
+             {
+                 DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
 
-                string title = selectedRow.Cells["Title"].Value.ToString();
-                string description = selectedRow.Cells["Description"].Value.ToString();
-                string category = selectedRow.Cells["Category"].Value.ToString();
+                 string title = selectedRow.Cells["Title"].Value.ToString();
+                 string description = selectedRow.Cells["Description"].Value.ToString();
 
+
+             }*/
+            string newsFolderPath = Path.Combine(desktopPath, "News");
+            Directory.CreateDirectory(newsFolderPath);
+            DataGridViewElementStates select = DataGridViewElementStates.Selected;
+            bool Isselect = Convert.ToBoolean(DataGridViewElementStates.Selected);
+            string[] newsFiles = Directory.GetFiles(newsFolderPath, "*.txt");
+                foreach (string filePath in newsFiles)
+                {
+                    foreach (DataGridViewRow rows in dataGridView1.Rows)
+                    {
+                        string serializedNews = File.ReadAllText(filePath);
+                    string[] newsAttributes = serializedNews.Split('#');
+                    if (Isselect)
+                    {
+                        richTextBox1.Text = newsAttributes[4];
+                    }
+                }
             }
         }
 
@@ -195,6 +197,16 @@ namespace FileWorxClient
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_DoubleClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

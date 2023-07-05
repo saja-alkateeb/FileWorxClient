@@ -39,7 +39,7 @@ namespace FileWorxClient
                 foreach (string filePath in userFiles)
                 {
                     string serializedUser = File.ReadAllText(filePath);
-                    string[] userAttributes = serializedUser.Split('#');
+                    string[] userAttributes = serializedUser.Split(new[] { "#%%%#" }, StringSplitOptions.None);
                     string fullName = userAttributes[0];
                     string username = userAttributes[1];
                     string password = userAttributes[2];

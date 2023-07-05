@@ -53,7 +53,7 @@ namespace FileWorxClient
                 string fileName = Guid.NewGuid().ToString();
 
                 string filePath = Path.Combine(usersFolderPath, $"{fileName}.txt");
-                char separator = '#';
+                string separator = "#%%%#";
                 string data = $"{fullName}{separator}{username}{separator}{password}{separator}{lastModifier}";
                // Directory.CreateDirectory(usersFolderPath);
                 File.WriteAllText(filePath, data);

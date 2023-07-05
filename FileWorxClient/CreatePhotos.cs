@@ -45,7 +45,7 @@ namespace FileWorxClient
             {
                 string fileName = Guid.NewGuid().ToString();
                 string filePath = Path.Combine(photosFolderPath, $"{fileName}.txt");
-                char separator = '#';
+                string separator = "#%%%#";
                 string data = $"{title}{separator}{creationDate}{separator}{description}{separator}{pictureLocation}{separator}{body}";
                 Directory.CreateDirectory(photosFolderPath);
                 File.WriteAllText(filePath, data);

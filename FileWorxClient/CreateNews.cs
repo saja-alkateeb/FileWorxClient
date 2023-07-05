@@ -61,7 +61,7 @@ namespace FileWorxClient
             {
                 string fileName = Guid.NewGuid().ToString();
                 string filePath = Path.Combine(newsFolderPath, $"{fileName}.txt");
-                char separator = '#';
+                string separator = "#%%%#";
                 string data = $"{title}{separator}{creationDate}{separator}{description}{separator}{category}{separator}{body}";
                 Directory.CreateDirectory(newsFolderPath);
                 File.WriteAllText(filePath, data);
