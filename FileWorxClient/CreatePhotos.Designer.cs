@@ -57,10 +57,9 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(1, 1);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(647, 559);
+            this.tabControl1.Size = new System.Drawing.Size(485, 454);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -71,67 +70,60 @@
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(639, 530);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Size = new System.Drawing.Size(477, 428);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "File Description";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(93, 124);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.richTextBox1.Location = new System.Drawing.Point(70, 101);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(503, 246);
+            this.richTextBox1.Size = new System.Drawing.Size(378, 201);
             this.richTextBox1.TabIndex = 5;
             this.richTextBox1.Text = "";
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(93, 80);
-            this.txtDescription.Margin = new System.Windows.Forms.Padding(4);
+            this.txtDescription.Location = new System.Drawing.Point(70, 65);
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(503, 22);
+            this.txtDescription.Size = new System.Drawing.Size(378, 20);
             this.txtDescription.TabIndex = 4;
             // 
             // txtTitle
             // 
-            this.txtTitle.Location = new System.Drawing.Point(93, 42);
-            this.txtTitle.Margin = new System.Windows.Forms.Padding(4);
+            this.txtTitle.Location = new System.Drawing.Point(70, 34);
             this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(503, 22);
+            this.txtTitle.Size = new System.Drawing.Size(378, 20);
             this.txtTitle.TabIndex = 3;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 124);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(7, 101);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(40, 17);
+            this.label3.Size = new System.Drawing.Size(31, 13);
             this.label3.TabIndex = 2;
             this.label3.Text = "Body";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 80);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(7, 65);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 17);
+            this.label2.Size = new System.Drawing.Size(60, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "Description";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 46);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(7, 37);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 17);
+            this.label1.Size = new System.Drawing.Size(27, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Title";
             // 
@@ -141,40 +133,37 @@
             this.tabPage2.Controls.Add(this.txtLocation);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.browseButton);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage2.Size = new System.Drawing.Size(639, 530);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage2.Size = new System.Drawing.Size(477, 428);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Image";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(28, 134);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox1.Location = new System.Drawing.Point(21, 109);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(585, 345);
+            this.pictureBox1.Size = new System.Drawing.Size(439, 280);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
             // txtLocation
             // 
-            this.txtLocation.Location = new System.Drawing.Point(143, 85);
-            this.txtLocation.Margin = new System.Windows.Forms.Padding(4);
+            this.txtLocation.Location = new System.Drawing.Point(107, 69);
             this.txtLocation.Name = "txtLocation";
             this.txtLocation.ReadOnly = true;
-            this.txtLocation.Size = new System.Drawing.Size(469, 22);
+            this.txtLocation.Size = new System.Drawing.Size(353, 20);
             this.txtLocation.TabIndex = 2;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(5, 89);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(4, 72);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(119, 17);
+            this.label4.Size = new System.Drawing.Size(90, 13);
             this.label4.TabIndex = 1;
             this.label4.Text = "Picture location is";
             // 
@@ -182,10 +171,9 @@
             // 
             this.browseButton.BackColor = System.Drawing.Color.LightSteelBlue;
             this.browseButton.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.browseButton.Location = new System.Drawing.Point(28, 27);
-            this.browseButton.Margin = new System.Windows.Forms.Padding(4);
+            this.browseButton.Location = new System.Drawing.Point(21, 22);
             this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(100, 28);
+            this.browseButton.Size = new System.Drawing.Size(75, 23);
             this.browseButton.TabIndex = 0;
             this.browseButton.Text = "Browse";
             this.browseButton.UseVisualStyleBackColor = false;
@@ -196,10 +184,9 @@
             this.cancleButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancleButton.BackColor = System.Drawing.Color.LightSteelBlue;
             this.cancleButton.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.cancleButton.Location = new System.Drawing.Point(543, 580);
-            this.cancleButton.Margin = new System.Windows.Forms.Padding(4);
+            this.cancleButton.Location = new System.Drawing.Point(407, 471);
             this.cancleButton.Name = "cancleButton";
-            this.cancleButton.Size = new System.Drawing.Size(100, 28);
+            this.cancleButton.Size = new System.Drawing.Size(75, 23);
             this.cancleButton.TabIndex = 7;
             this.cancleButton.Text = "Cancle";
             this.cancleButton.UseVisualStyleBackColor = false;
@@ -210,10 +197,9 @@
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.BackColor = System.Drawing.Color.LightSteelBlue;
             this.saveButton.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.saveButton.Location = new System.Drawing.Point(443, 580);
-            this.saveButton.Margin = new System.Windows.Forms.Padding(4);
+            this.saveButton.Location = new System.Drawing.Point(332, 471);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(92, 28);
+            this.saveButton.Size = new System.Drawing.Size(69, 23);
             this.saveButton.TabIndex = 6;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = false;
@@ -221,13 +207,12 @@
             // 
             // CreatePhotos
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(651, 642);
+            this.ClientSize = new System.Drawing.Size(488, 522);
             this.Controls.Add(this.cancleButton);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.saveButton);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "CreatePhotos";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Create Photo";

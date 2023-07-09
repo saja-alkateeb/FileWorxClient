@@ -20,9 +20,7 @@ namespace FileWorxClient
         public newNewsForm()
         {
             InitializeComponent();
-            
         }
-
         private void cancleButton_Click(object sender, EventArgs e)
         {
             txtTitle.Text = string.Empty;
@@ -71,10 +69,6 @@ namespace FileWorxClient
                 comboBoxCategory.Text = string.Empty;   
                 richTextBox1.Clear();
                 this.Close();
-              
-
-
-
             }
             catch (Exception ex)
             {
@@ -102,7 +96,6 @@ namespace FileWorxClient
                 this.Category = category;
                 this.CreationDate = creationDate;
                 this.FileName = fileName;
-
             }
 
         }

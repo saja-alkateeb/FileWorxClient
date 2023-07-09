@@ -49,7 +49,7 @@ namespace FileWorxClient
                 return;
             }
             //confirm password
-            try
+                try
                 {
                     string fileName = Guid.NewGuid().ToString();
                     string filePath = Path.Combine(usersFolderPath, $"{fileName}.txt");
@@ -60,15 +60,17 @@ namespace FileWorxClient
                     txtFullName.Text = string.Empty;
                     txtUsername.Text = string.Empty;
                     txtPassword.Text = string.Empty;
+                    txtConfirmPass.Text = string.Empty;
                     this.Close();
                     Home2 mainForm = new Home2();
                     mainForm.Show();
-                
+
                 }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred while creating the user: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occurred while creating the user: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            
 
         }
 
@@ -89,19 +91,21 @@ namespace FileWorxClient
 
         private void hideButton_Click(object sender, EventArgs e)
         {
-            if (txtPassword.PasswordChar == '\0')
+            //Show button
+            if (txtPassword.PasswordChar == '*')
             {
-                hideButton.BringToFront();
-                txtPassword.PasswordChar = '*';
+                showButton.BringToFront();
+                txtPassword.PasswordChar = '\0';
             }
         }
 
         private void showButton_Click(object sender, EventArgs e)
         {
-            if (txtPassword.PasswordChar == '*')
+            //Hide Button
+            if (txtPassword.PasswordChar == '\0')
             {
-                showButton.BringToFront();
-                txtPassword.PasswordChar = '\0';
+                hideButton.BringToFront();
+                txtPassword.PasswordChar = '*';
             }
         }
     }
