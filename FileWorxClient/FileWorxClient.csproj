@@ -52,6 +52,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Home2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Home2.Designer.cs">
+      <DependentUpon>Home2.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListUsers.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,9 +70,7 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="Home.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Home.cs" />
     <Compile Include="Home.Designer.cs">
       <DependentUpon>Home.cs</DependentUpon>
     </Compile>
@@ -90,6 +94,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Home2.resx">
+      <DependentUpon>Home2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ListUsers.resx">
       <DependentUpon>ListUsers.cs</DependentUpon>
     </EmbeddedResource>

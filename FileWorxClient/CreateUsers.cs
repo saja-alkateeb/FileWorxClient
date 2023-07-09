@@ -36,33 +36,35 @@ namespace FileWorxClient
             string fullName = txtFullName.Text;
             string username = txtUsername.Text;
             string password = txtPassword.Text;
-            string lastModifier = Environment.UserName;
-            if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            string confirmPassword = txtConfirmPass.Text;
+            string lastModifier = fullName;
+            if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)|| string.IsNullOrEmpty(confirmPassword))
             {
                 MessageBox.Show("Please enter all the required information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (fullName.Length > 255 || username.Length > 255 || password.Length > 255)
+            if (fullName.Length > 255 || username.Length > 255 || password.Length > 255||confirmPassword.Length > 255)
             {
-                //Haytham note:Detail the error(specify the valid length for each field)
                 MessageBox.Show("Please enter valid length.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            //confirm password
             try
-            {
-                string fileName = Guid.NewGuid().ToString();
-
-                string filePath = Path.Combine(usersFolderPath, $"{fileName}.txt");
-                string separator = "#%%%#";
-                string data = $"{fullName}{separator}{username}{separator}{password}{separator}{lastModifier}";
-               // Directory.CreateDirectory(usersFolderPath);
-                File.WriteAllText(filePath, data);
-                MessageBox.Show("User created and saved successfully!");
-                txtFullName.Text = string.Empty;
-                txtUsername.Text = string.Empty;
-                txtPassword.Text = string.Empty;
-                this.Close();
-            }
+                {
+                    string fileName = Guid.NewGuid().ToString();
+                    string filePath = Path.Combine(usersFolderPath, $"{fileName}.txt");
+                    string separator = "#%%%#";
+                    string data = $"{fullName}{separator}{username}{separator}{password}{separator}{lastModifier}{separator}{fileName}";
+                    File.WriteAllText(filePath, data);
+                    MessageBox.Show("User created and saved successfully!");
+                    txtFullName.Text = string.Empty;
+                    txtUsername.Text = string.Empty;
+                    txtPassword.Text = string.Empty;
+                    this.Close();
+                    Home2 mainForm = new Home2();
+                    mainForm.Show();
+                
+                }
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while creating the user: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -74,6 +76,33 @@ namespace FileWorxClient
         {
 
         }
-      
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtConfirmPass_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void hideButton_Click(object sender, EventArgs e)
+        {
+            if (txtPassword.PasswordChar == '\0')
+            {
+                hideButton.BringToFront();
+                txtPassword.PasswordChar = '*';
+            }
+        }
+
+        private void showButton_Click(object sender, EventArgs e)
+        {
+            if (txtPassword.PasswordChar == '*')
+            {
+                showButton.BringToFront();
+                txtPassword.PasswordChar = '\0';
+            }
+        }
     }
 }

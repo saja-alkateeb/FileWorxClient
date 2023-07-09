@@ -38,14 +38,13 @@ namespace FileWorxClient
             Directory.CreateDirectory(newsFolderPath);
             string title = txtTitle.Text;
             string description = txtDescription.Text;
-            comboBoxCategory.Items.Add("Genera");
+            comboBoxCategory.Items.Add("General");
             comboBoxCategory.Items.Add("Sports");
             comboBoxCategory.Items.Add("Health");
             comboBoxCategory.Items.Add("Politics");
             string category = comboBoxCategory.SelectedItem.ToString();
             string body = richTextBox1.Text;
             DateTime creationDate = DateTime.Now;
-            News news = new News(title, description, category, body, creationDate);
             if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) ||string.IsNullOrEmpty(category) || string.IsNullOrEmpty(body))
             {
                 MessageBox.Show("Please enter all the required information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -61,8 +60,9 @@ namespace FileWorxClient
             {
                 string fileName = Guid.NewGuid().ToString();
                 string filePath = Path.Combine(newsFolderPath, $"{fileName}.txt");
+                News news = new News(title, description, category, body, creationDate, fileName);
                 string separator = "#%%%#";
-                string data = $"{title}{separator}{creationDate}{separator}{description}{separator}{category}{separator}{body}";
+                string data = $"{title}{separator}{creationDate}{separator}{description}{separator}{category}{separator}{body}{separator}{fileName}";
                 Directory.CreateDirectory(newsFolderPath);
                 File.WriteAllText(filePath, data);
                 MessageBox.Show("News created and saved successfully!");
@@ -71,6 +71,10 @@ namespace FileWorxClient
                 comboBoxCategory.Text = string.Empty;   
                 richTextBox1.Clear();
                 this.Close();
+              
+
+
+
             }
             catch (Exception ex)
             {
@@ -89,14 +93,16 @@ namespace FileWorxClient
             public string Body { get; set; }
             public string Category { get; set; }
             public DateTime CreationDate { get; set; }
-            public News(string title,string description,string body,string category,DateTime creationDate)
+            public string FileName { get; set; }
+            public News(string title, string description, string body, string category, DateTime creationDate,string fileName)
             {
                 this.Title = title;
-                this.Description = description; 
+                this.Description = description;
                 this.Body = body;
                 this.Category = category;
                 this.CreationDate = creationDate;
-                
+                this.FileName = fileName;
+
             }
 
         }

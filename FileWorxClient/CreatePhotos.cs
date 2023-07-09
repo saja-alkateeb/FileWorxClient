@@ -19,8 +19,7 @@ namespace FileWorxClient
         {
             InitializeComponent();
         }
-
-        private void saveButton_Click(object sender, EventArgs e)
+    private void saveButton_Click(object sender, EventArgs e)
         {
             string photosFolderPath = Path.Combine(desktopPath, "Photos");
             Directory.CreateDirectory(photosFolderPath);
@@ -29,7 +28,6 @@ namespace FileWorxClient
             string pictureLocation = txtLocation.Text;
             string body = richTextBox1.Text;
             DateTime creationDate = DateTime.Now;
-            Photos photo = new Photos(title, description, body, pictureLocation, creationDate);
             if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(pictureLocation) || string.IsNullOrEmpty(body))
             {
                 MessageBox.Show("Please enter all the required information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -37,16 +35,16 @@ namespace FileWorxClient
             }
             if (title.Length > 255 || description.Length > 255 || body.Length > 10000)
             {
-                //Haytham note:Detail the error(specify the valid length for each field)
                 MessageBox.Show("Please enter valid length.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             try
             {
                 string fileName = Guid.NewGuid().ToString();
+                Photos photo = new Photos(title, description, body, pictureLocation, creationDate, fileName);
                 string filePath = Path.Combine(photosFolderPath, $"{fileName}.txt");
                 string separator = "#%%%#";
-                string data = $"{title}{separator}{creationDate}{separator}{description}{separator}{pictureLocation}{separator}{body}";
+                string data = $"{title}{separator}{creationDate}{separator}{description}{separator}{pictureLocation}{separator}{body}{separator}{fileName}";
                 Directory.CreateDirectory(photosFolderPath);
                 File.WriteAllText(filePath, data);
                 MessageBox.Show("Photos created and saved successfully!");
@@ -60,7 +58,6 @@ namespace FileWorxClient
             {
                 MessageBox.Show("An error occurred while creating the photo: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void cancleButton_Click(object sender, EventArgs e)
@@ -69,8 +66,6 @@ namespace FileWorxClient
             txtDescription.Text = string.Empty;
             richTextBox1.Clear();
             this.Close();
-            //this.Hide();
-          
         }
         public class Photos
         {
@@ -79,14 +74,15 @@ namespace FileWorxClient
             public string Body { get; set; }
             public string PictureLocation { get; set; }
             public DateTime CreationDate { get; set; }
-            public Photos(string title, string description, string body, string pictureLocation, DateTime creationDate)
+            public string fileName { get; set; }
+            public Photos(string title, string description, string body, string pictureLocation, DateTime creationDate, string fileName)
             {
                 this.Title = title;
                 this.Description = description;
                 this.Body = body;
                 this.PictureLocation = pictureLocation;
                 this.CreationDate = creationDate;
-
+                this.fileName = fileName;
             }
 
         }
@@ -115,6 +111,11 @@ namespace FileWorxClient
                     MessageBox.Show("An error occurred while uploading the photo: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void CreatePhotos_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
