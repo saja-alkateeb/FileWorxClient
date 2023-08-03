@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 namespace FileWorxClient
 {
     internal static class Program
@@ -16,9 +16,10 @@ namespace FileWorxClient
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new loginForm());
-              
+            Application.Run(new frmLogin());
             
+            
+
         }
     }
 }
