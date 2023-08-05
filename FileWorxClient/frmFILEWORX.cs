@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-
+using System.IO;
 namespace FileWorxClient
 {
     public partial class frmFILEWORX : Form
@@ -86,7 +86,6 @@ namespace FileWorxClient
                 photoDB.ID = id;
                 photoDB.Read();
                 txtTiltle.Text = photoDB.Name;
-
                 txtCreationDate.Text = photoDB.CreationDate.ToString();
                 picImage.Image = Image.FromFile(photoDB.PhotoPath);
                 rtbPreview.Text = $"{photoDB.Body}";
@@ -141,16 +140,32 @@ namespace FileWorxClient
                 string ID = tagParts[1];
                 if (MessageBox.Show("Are you sure you want to delete this object?", "Delete Object", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    //clsBusinessObject.ID = ID;
-                    clsPhoto.ID = ID;
-                    clsPhoto.Delete();
-                    //clsBusinessObject.Delete();
+                    if (fileType == "Photos")
+                    {
+                        var photoDB = new clsPhoto();
+                        photoDB.ID = ID;
+                        photoDB.Read();
+                        if (!string.IsNullOrEmpty(photoDB.PhotoPathCopy) && File.Exists(photoDB.PhotoPathCopy))
+                        {
+                            File.Delete(photoDB.PhotoPathCopy);
+                        }
+
+                        clsBusinessObject.ID = ID;
+                        clsBusinessObject.Delete();
+                    }
+                    else if (fileType == "News")
+                    {
+                        clsBusinessObject.ID = ID;
+                        clsBusinessObject.Delete();
+                    }
                     selectedItem = lstViewObjects.SelectedItems[0];
                     selectedItem.Remove();
                     EmptyFields();
                 }
             }
-        }
+
+         }
+
         private void mnuRelogin_Click_1(object sender, EventArgs e)
         {
             this.Hide();

@@ -47,7 +47,7 @@ namespace FileWorxClient
             {
                 MessageBox.Show("Error occurred during Insert:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+        }//insert
 
         public override void Update()
         {
@@ -61,13 +61,17 @@ namespace FileWorxClient
             {
                 MessageBox.Show("Error occurred during Update:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
+        }//Update
         public override void Delete()
         {
-
+            base.Delete();
             try
             {
+                if (!string.IsNullOrEmpty(PhotoPath) && File.Exists(PhotoPath))
+                {
+                    File.Delete(PhotoPath);
+                }
+
                 if (!string.IsNullOrEmpty(PhotoPathCopy) && File.Exists(PhotoPathCopy))
                 {
                     File.Delete(PhotoPathCopy);
@@ -77,9 +81,7 @@ namespace FileWorxClient
             {
                 MessageBox.Show("Error occurred during file deletion: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            base.Delete();
-
-        }
+        }//Delete
 
 
     }
