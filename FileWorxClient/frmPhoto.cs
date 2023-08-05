@@ -68,8 +68,7 @@ namespace FileWorxClient
                 photoDB.PhotoPath = pictureLocation;
                 photoDB.PhotoPathCopy = photoPathCopy;
                 clsClass classDB = new clsClass();
-                classDB.ID = 2;
-                photoDB.ClassID = classDB.ID;
+                photoDB.ClassID = (int)ClassIds.Photo;
                 photoDB.Insert();
                 EmptyFields();
                 DialogResult = DialogResult.OK;

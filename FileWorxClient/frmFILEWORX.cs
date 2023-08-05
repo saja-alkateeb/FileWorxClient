@@ -51,6 +51,8 @@ namespace FileWorxClient
             var photoQuery = new clsPhotoQuery();
             var newsDB = new clsNews();
             var newsQuery = new clsNewsQuery();
+            photoQuery.QClasses = ClassIds.Photo;
+            newsQuery.QClasses = ClassIds.News;
             photoQuery.Run();
             newsQuery.Run();
             List<clsPhoto> photosList = photoQuery.PhotoList;
@@ -284,6 +286,7 @@ namespace FileWorxClient
                 tCtrlPreview.Controls.Add(tabPage2);
             var newsDB = new clsNews();
             var newsQuery = new clsNewsQuery();
+            newsQuery.QClasses = ClassIds.News;
             newsQuery.Run();
             List<clsNews> newsList = newsQuery.NewsList;
             foreach (clsNews news in newsList)
@@ -292,7 +295,7 @@ namespace FileWorxClient
                 item.SubItems.Add(news.CreationDate.ToString());
                 item.SubItems.Add(news.Description);
                 item.SubItems.Add(news.Creator);
-                item.Tag = $"News|{news.ID}"; // Store the news ID in the Tag
+                item.Tag = $"News|{news.ID}"; 
                 lstViewObjects.Items.Add(item);
             }
         }
@@ -304,6 +307,7 @@ namespace FileWorxClient
                 tCtrlPreview.Controls.Add(tabPage2);
             var photoDB = new clsPhoto();
             var photoQuery = new clsPhotoQuery();
+            photoQuery.QClasses = ClassIds.Photo;
             photoQuery.Run();
             List<clsPhoto> photosList = photoQuery.PhotoList;
             foreach (clsPhoto photo in photosList)
@@ -312,7 +316,7 @@ namespace FileWorxClient
                 item.SubItems.Add(photo.CreationDate.ToString());
                 item.SubItems.Add(photo.Description);
                 item.SubItems.Add(photo.Creator);
-                item.Tag = $"Photos|{photo.ID}";// Store the photo ID in the Tag
+                item.Tag = $"Photos|{photo.ID}";
                 lstViewObjects.Items.Add(item);
             }
         }

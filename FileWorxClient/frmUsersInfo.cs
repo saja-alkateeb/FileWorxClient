@@ -27,6 +27,7 @@ namespace FileWorxClient
             {
                 clsUser User = new clsUser();
                 clsUserQuery UserQuery = new clsUserQuery();
+                UserQuery.QClasses = ClassIds.User;
                 UserQuery.Run();
                 List<clsUser> userList = UserQuery.UserList;
                 foreach (clsUser user in userList)

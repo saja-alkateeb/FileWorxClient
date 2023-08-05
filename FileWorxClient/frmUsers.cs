@@ -52,8 +52,7 @@ namespace FileWorxClient
                     userDB.CreationDate = DateTime.Now;
                     userDB.Creator = "root";
                     clsClass classDB = new clsClass();
-                    classDB.ID = 3;
-                    userDB.ClassID = classDB.ID;
+                    userDB.ClassID = (int)ClassIds.User;
                     userDB.Insert();
                     EmptyFields();
                     this.Close();

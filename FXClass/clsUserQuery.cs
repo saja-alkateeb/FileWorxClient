@@ -7,6 +7,7 @@ namespace FileWorxClient
     {
         public List<clsUser> UserList { get; set; } = new List<clsUser>();
         private readonly DBConnNET4.clsDBConnection dBConn;
+        public ClassIds QClasses { get; set; }
         public clsUserQuery()
         {
             dBConn = DBConnectionSingleton.GetInstance();
@@ -16,9 +17,9 @@ namespace FileWorxClient
             using (var dbConn = new clsDBConnection())
             {
                 string SQLCommand = "SELECT B.C_NAME, B.ID, U.UserName, U.Password " +
-                "FROM T_BusinessObject B " +
-                "INNER JOIN T_User U ON B.ID = U.ID " +
-                "WHERE B.C_ClassID = 3";
+                                    "FROM T_BusinessObject B " +
+                                    "INNER JOIN T_User U ON B.ID = U.ID " +
+                                    "WHERE B.C_ClassID = " + (int)ClassIds.User;
                 string[,] queryResArray = null;
                 int maxRows = 10;
                 short maxColumns = 10;

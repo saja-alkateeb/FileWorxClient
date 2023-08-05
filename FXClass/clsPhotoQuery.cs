@@ -5,6 +5,7 @@ namespace FileWorxClient
 {
     public class clsPhotoQuery
     {
+        public ClassIds QClasses { get; set; }
         public List<clsPhoto> PhotoList { get; set; } = new List<clsPhoto>();
         private readonly DBConnNET4.clsDBConnection dBConn;
         public clsPhotoQuery()
@@ -15,12 +16,12 @@ namespace FileWorxClient
         {
             using (var dbConn = new clsDBConnection())
             {
-                string SQLCommand = "SELECT B.ID, B.C_Description, B.C_CreationDate, B.C_LastModificationDate, B.C_ClassID, B.C_NAME, B.LastModifier, B.Creator, F.C_Body, P.PhotoPath " +
-                "FROM T_BusinessObject B " +
-                "INNER JOIN T_Class C ON B.C_ClassID = 2 " +
-                "INNER JOIN T_File F ON B.ID = F.ID " +
-                "INNER JOIN T_Photo P ON B.ID = P.ID " +
-                "GROUP BY B.ID, B.C_Description, B.C_CreationDate, B.C_LastModificationDate, B.C_ClassID, B.C_NAME, B.LastModifier, B.Creator, F.C_Body, P.PhotoPath";
+             string SQLCommand = "SELECT B.ID, B.C_Description, B.C_CreationDate, B.C_LastModificationDate, B.C_ClassID, B.C_NAME, B.LastModifier, B.Creator, F.C_Body, P.PhotoPath " +
+              "FROM T_BusinessObject B " +
+              "INNER JOIN T_Class C ON B.C_ClassID = " + (int)QClasses + " " +
+              "INNER JOIN T_File F ON B.ID = F.ID " +
+              "INNER JOIN T_Photo P ON B.ID = P.ID " +
+              "GROUP BY B.ID, B.C_Description, B.C_CreationDate, B.C_LastModificationDate, B.C_ClassID, B.C_NAME, B.LastModifier, B.Creator, F.C_Body, P.PhotoPath";
                 string[,] queryResArray = null;
                 int maxRows = 10;
                 short maxColumns = 10;

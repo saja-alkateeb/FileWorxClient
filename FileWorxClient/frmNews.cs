@@ -83,8 +83,7 @@ namespace FileWorxClient
                 db.Creator = LastModifier;
                 db.Category = category;
                 clsClass classDB = new clsClass();
-                classDB.ID = 1;
-                db.ClassID = classDB.ID;
+                db.ClassID = (int)ClassIds.News;
                 db.Insert();
                 EmptyFields();
                 this.Close();
