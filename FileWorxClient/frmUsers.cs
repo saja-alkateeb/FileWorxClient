@@ -95,7 +95,12 @@ namespace FileWorxClient
         }
 
         private void frmUsers_FormClosed(object sender, FormClosedEventArgs e)
+
         {
+            if (this.Owner is frmUsersInfo userForm)
+            {
+                userForm.OnNewObjectAdded(EventArgs.Empty);
+            }
 
         }
 

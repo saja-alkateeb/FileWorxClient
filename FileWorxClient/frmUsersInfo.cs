@@ -7,15 +7,27 @@ namespace FileWorxClient
     {
         public string ID { get; set; }
         string separator = Constants.Separator;
+        public delegate void NewObjectAddedEventHandler(object sender, EventArgs e);
+        public event NewObjectAddedEventHandler NewObjectAdded;
 
         public frmUsersInfo()
         {
             InitializeComponent();
+            this.NewObjectAdded += frmUsersInfo_NewObjectAdded;
         }
         private void frmUsersInfo_Load(object sender, EventArgs e)
         {
             this.MinimumSize = new System.Drawing.Size(450, 450);
             PopulateListView();
+        }
+        private void frmUsersInfo_NewObjectAdded(object sender, EventArgs e)
+        {
+            lstViewUsers.Items.Clear();
+            PopulateListView();
+        }
+        public void OnNewObjectAdded(EventArgs e)
+        {
+            NewObjectAdded?.Invoke(this, e);
         }
         private void lstViewUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -80,7 +92,10 @@ namespace FileWorxClient
 
         private void btnCreare_Click(object sender, EventArgs e)
         {
-            frmUsers frmUsers = new frmUsers();
+            frmUsers frmUsers = new frmUsers()
+            {
+                Owner = this
+            };
             frmUsers.ShowDialog();
         }
 

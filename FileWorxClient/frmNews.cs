@@ -39,8 +39,6 @@ namespace FileWorxClient
         {
             InitializeComponent();
             this.LastModifier = lastModifier;
-            SqlConnection connection = new SqlConnection(Constants.ConnectionString);
-            connection.Open();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
