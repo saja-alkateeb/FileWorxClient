@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileWorxClient
+﻿namespace FileWorxServer
 {
+
     public enum ClassIds
     {
         User = 3,
         Photo = 2,
-        News = 1
+        Contact=4,
+        News = 1,
+        All = -1
     }
     public class clsClass
     {
         public int ID { get; set; }
         public string ClassName { get; set; }
-        
-
-
 
     }
 }

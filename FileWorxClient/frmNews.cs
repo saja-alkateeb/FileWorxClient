@@ -8,10 +8,11 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using DBConnNET4;
+using FileWorxServer;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-  using static DBConnNET4.clsDBConnection;
+using static DBConnNET4.clsDBConnection;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
@@ -19,9 +20,8 @@ namespace FileWorxClient
 {
     public partial class frmNews :Form
     {
-        string LastModifier;
         private clsNews clsNews;
-        DBConnNET4.clsDBConnection dBConn = new clsDBConnection();
+        public string NewsId { get; set; }
         public frmNews()
         {
             InitializeComponent();
@@ -30,72 +30,75 @@ namespace FileWorxClient
         {
             InitializeComponent();
             clsNews = news;
-            txtTitle.Text = clsNews.Name;
-            txtDescription.Text = clsNews.Description;
-            cmboCategory.Text= clsNews.Category;
-            rtbBody.Text = clsNews.Body;
+            NewsId = news.ID;
+            FillFields();
         }
         public frmNews(string lastModifier)
         {
             InitializeComponent();
-            this.LastModifier = lastModifier;
         }
-
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            EmptyFields();
             this.Close();
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
             string title = txtTitle.Text;
             string description = txtDescription.Text;
-            //************Bug**************
-            //Click on Save btn in News frm while the Category field is empty->return NULL
-            //if (cmboCategory.SelectedItem.ToString() == null)
-            //{
-            //    MessageBox.Show("Please enter all the required information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return;
-            //}
             string category = cmboCategory.SelectedItem.ToString();
             string body = rtbBody.Text;
             DateTime creationDate = DateTime.Now;
-            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) ||string.IsNullOrEmpty(category) || string.IsNullOrEmpty(body))
+            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || string.IsNullOrEmpty(category) || string.IsNullOrEmpty(body))
             {
                 MessageBox.Show("Please enter all the required information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (title.Length > 255 || description.Length > 255 || body.Length > 10000)
-            {
-                MessageBox.Show("Please enter valid length.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
             try
             {
-                clsNews db = new clsNews();
-                db.ID = Guid.NewGuid().ToString();
-                db.Name = title;
-                db.Description = description;
-                db.Body = body;
-                db.CreationDate = creationDate;
-                db.Creator = LastModifier;
-                db.Category = category;
+                clsNews newsDB = new clsNews();
+                if (!string.IsNullOrEmpty(NewsId))
+                {
+                    newsDB.ID = NewsId;
+                    short readStatus = newsDB.Read();
+                    if (readStatus != 0)
+                    {
+                        MessageBox.Show("Read operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    newsDB.ID = Guid.NewGuid().ToString();
+                }
+                newsDB.Name = title;
+                newsDB.Description = description;
+                newsDB.Body = body;
+                newsDB.CreationDate = creationDate;
+                newsDB.Category = category;
                 clsClass classDB = new clsClass();
-                db.ClassID = (int)ClassIds.News;
-                db.Insert();
-                EmptyFields();
+                newsDB.ClassID = (int)ClassIds.News;
+                if (!string.IsNullOrEmpty(NewsId))
+                {
+                    short updateStatus = newsDB.Update();
+                    if (updateStatus != 0)
+                    {
+                        MessageBox.Show("Update operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    short insertStatus = newsDB.Insert();
+                    if (insertStatus != 0)
+                    {
+                        MessageBox.Show("Insert operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                DialogResult = DialogResult.OK;
                 this.Close();
-               
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while creating the news: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred while creating/editing the news: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-        private void frmNews_Load(object sender, EventArgs e)
-        {
-            btnSave.BringToFront();
-            this.MinimumSize = new System.Drawing.Size(450, 450);
         }
         public void EmptyFields()
         {
@@ -104,24 +107,12 @@ namespace FileWorxClient
             cmboCategory.Text = string.Empty;
             rtbBody.Clear();
         }
-        private void btnEdit_Click(object sender, EventArgs e)
+        private void FillFields()
         {
-            clsNews.Name = txtTitle.Text;
-            clsNews.Description = txtDescription.Text;
-            clsNews.Category = cmboCategory.Text;
-            clsNews.Body = rtbBody.Text;
-            DialogResult dialogResult = MessageBox.Show("Are you sure you want to edit this object?", "Edit Object", MessageBoxButtons.YesNo);
-            if(dialogResult==DialogResult.Yes)
-            DialogResult = DialogResult.OK;
-            Close();
-        }
-
-        private void frmNews_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (this.Owner is frmFILEWORX fileworxForm)
-            {
-                fileworxForm.OnNewObjectAdded(EventArgs.Empty);
-            }
+            txtTitle.Text = clsNews.Name;
+            txtDescription.Text = clsNews.Description;
+            cmboCategory.Text = clsNews.Category;
+            rtbBody.Text = clsNews.Body;
         }
     }
 }

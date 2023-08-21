@@ -7,8 +7,8 @@
     <ProjectGuid>{7D94003F-5A7B-4718-B37A-8500CE39B7FB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FXClass</RootNamespace>
-    <AssemblyName>FXClass</AssemblyName>
+    <RootNamespace>FileWorxServer</RootNamespace>
+    <AssemblyName>FileWorxServer</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -45,17 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="clsBusinessObject.cs" />
     <Compile Include="clsClass.cs" />
+    <Compile Include="clsContact.cs" />
+    <Compile Include="clsContactQuery.cs" />
     <Compile Include="clsFile.cs" />
+    <Compile Include="clsFilesQuery.cs" />
     <Compile Include="clsNews.cs" />
-    <Compile Include="clsNewsQuery.cs" />
     <Compile Include="clsPhoto.cs" />
-    <Compile Include="clsPhotoQuery.cs" />
     <Compile Include="clsUser.cs" />
     <Compile Include="clsUserQuery.cs" />
-    <Compile Include="Constant.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="DBConnectionSingleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

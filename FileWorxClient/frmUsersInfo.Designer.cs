@@ -50,7 +50,7 @@
             this.lstViewUsers.ContextMenuStrip = this.ctxUsers;
             this.lstViewUsers.HideSelection = false;
             this.lstViewUsers.Location = new System.Drawing.Point(-1, 10);
-            this.lstViewUsers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lstViewUsers.Margin = new System.Windows.Forms.Padding(2);
             this.lstViewUsers.MultiSelect = false;
             this.lstViewUsers.Name = "lstViewUsers";
             this.lstViewUsers.Size = new System.Drawing.Size(453, 158);
@@ -87,7 +87,7 @@
             // 
             // btnCreare
             // 
-            this.btnCreare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCreare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCreare.Location = new System.Drawing.Point(12, 173);
             this.btnCreare.Name = "btnCreare";
             this.btnCreare.Size = new System.Drawing.Size(75, 30);

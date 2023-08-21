@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using FileWorxServer;
 namespace FileWorxClient
 {
     public partial class frmUsersInfo : Form
@@ -9,7 +10,6 @@ namespace FileWorxClient
         string separator = Constants.Separator;
         public delegate void NewObjectAddedEventHandler(object sender, EventArgs e);
         public event NewObjectAddedEventHandler NewObjectAdded;
-
         public frmUsersInfo()
         {
             InitializeComponent();
@@ -68,7 +68,11 @@ namespace FileWorxClient
                     if (MessageBox.Show("Are you sure you want to delete this object?", "Delete Object", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         clsBusinessObject.ID = Id;
-                        clsBusinessObject.Delete();
+                        short deleteStatus = clsBusinessObject.Delete();
+                        if (deleteStatus != 0)
+                        {
+                            MessageBox.Show("Delete operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                         ListViewItem selectedItem = lstViewUsers.SelectedItems[0];
                         selectedItem.Remove();
                     }
@@ -92,7 +96,7 @@ namespace FileWorxClient
 
         private void btnCreare_Click(object sender, EventArgs e)
         {
-            frmUsers frmUsers = new frmUsers()
+            frmUser frmUsers = new frmUser()
             {
                 Owner = this
             };
@@ -110,18 +114,25 @@ namespace FileWorxClient
                 clsUser clsUser = new clsUser();
                 clsUser.ID = id;
                 clsUser.LastModifier = clsUser.ID;
-                clsUser.Read();
-                frmUsers frmUsers = new frmUsers(clsUser);
+                short readStatus = clsUser.Read();
+                if (readStatus != 0)
+                {
+                    MessageBox.Show("Read operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                frmUser frmUsers = new frmUser(clsUser);
                 frmUsers.btnEdit.Visible = true;
                 frmUsers.btnSave.Visible = false;
                 frmUsers.txtPassword.ReadOnly = true;
                 frmUsers.txtConfirmPass.ReadOnly = true;
-
                 if (frmUsers.ShowDialog() == DialogResult.OK)
                 {
                     selectedItem.SubItems[0].Text = frmUsers.txtFullName.Text;
                     selectedItem.SubItems[1].Text = frmUsers.txtUsername.Text;
-                    clsUser.Update();
+                   short updateStatus= clsUser.Update();
+                    if (updateStatus != 0)
+                    {
+                        MessageBox.Show("Update operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                     lstViewUsers.FullRowSelect = true;
                 }
             }

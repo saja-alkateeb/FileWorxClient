@@ -43,7 +43,6 @@
             this.btnBrowse = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.btnEdit = new System.Windows.Forms.Button();
             this.tabCtrlInfo.SuspendLayout();
             this.tabPge1.SuspendLayout();
             this.tabPge2.SuspendLayout();
@@ -60,7 +59,7 @@
             this.tabCtrlInfo.Location = new System.Drawing.Point(-3, 1);
             this.tabCtrlInfo.Name = "tabCtrlInfo";
             this.tabCtrlInfo.SelectedIndex = 0;
-            this.tabCtrlInfo.Size = new System.Drawing.Size(458, 346);
+            this.tabCtrlInfo.Size = new System.Drawing.Size(458, 368);
             this.tabCtrlInfo.TabIndex = 0;
             // 
             // tabPge1
@@ -74,7 +73,7 @@
             this.tabPge1.Location = new System.Drawing.Point(4, 22);
             this.tabPge1.Name = "tabPge1";
             this.tabPge1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPge1.Size = new System.Drawing.Size(450, 320);
+            this.tabPge1.Size = new System.Drawing.Size(450, 342);
             this.tabPge1.TabIndex = 0;
             this.tabPge1.Text = "File Description";
             this.tabPge1.UseVisualStyleBackColor = true;
@@ -87,10 +86,9 @@
             this.rtbBody.Location = new System.Drawing.Point(73, 86);
             this.rtbBody.MaxLength = 10000;
             this.rtbBody.Name = "rtbBody";
-            this.rtbBody.Size = new System.Drawing.Size(369, 228);
+            this.rtbBody.Size = new System.Drawing.Size(369, 250);
             this.rtbBody.TabIndex = 5;
             this.rtbBody.Text = "";
-            this.rtbBody.TextChanged += new System.EventHandler(this.rtbBody_TextChanged);
             // 
             // txtDescription
             // 
@@ -205,7 +203,7 @@
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.BackColor = System.Drawing.SystemColors.Control;
             this.btnCancel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnCancel.Location = new System.Drawing.Point(369, 353);
+            this.btnCancel.Location = new System.Drawing.Point(369, 375);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(74, 34);
             this.btnCancel.TabIndex = 7;
@@ -218,7 +216,7 @@
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.BackColor = System.Drawing.SystemColors.Control;
             this.btnSave.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSave.Location = new System.Drawing.Point(289, 353);
+            this.btnSave.Location = new System.Drawing.Point(289, 375);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(74, 34);
             this.btnSave.TabIndex = 6;
@@ -226,34 +224,18 @@
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // btnEdit
-            // 
-            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEdit.BackColor = System.Drawing.SystemColors.Control;
-            this.btnEdit.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnEdit.Location = new System.Drawing.Point(289, 353);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(74, 34);
-            this.btnEdit.TabIndex = 8;
-            this.btnEdit.Text = "Save";
-            this.btnEdit.UseVisualStyleBackColor = false;
-            this.btnEdit.Visible = false;
-            this.btnEdit.Click += new System.EventHandler(this.btnedit_Click);
-            // 
             // frmPhoto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(451, 389);
-            this.Controls.Add(this.btnEdit);
+            this.ClientSize = new System.Drawing.Size(451, 411);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.tabCtrlInfo);
             this.Controls.Add(this.btnSave);
+            this.MinimumSize = new System.Drawing.Size(450, 450);
             this.Name = "frmPhoto";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Photo";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmPhoto_FormClosed);
-            this.Load += new System.EventHandler(this.frmPhoto_Load);
             this.tabCtrlInfo.ResumeLayout(false);
             this.tabPge1.ResumeLayout(false);
             this.tabPge1.PerformLayout();
@@ -281,6 +263,5 @@
         public System.Windows.Forms.TextBox txtDescription;
         public System.Windows.Forms.TextBox txtTitle;
         public System.Windows.Forms.Button btnBrowse;
-        public System.Windows.Forms.Button btnEdit;
     }
 }

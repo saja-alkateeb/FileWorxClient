@@ -1,4 +1,4 @@
-﻿namespace FileWorxClient
+﻿namespace FileWorxServer
 {
     public static class Constants
     {

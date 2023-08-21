@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace FileWorxClient
+namespace FileWorxServer
 {
     public class clsBusinessObject
     {
@@ -10,74 +10,79 @@ namespace FileWorxClient
         public string Name { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastModificationDate { get; set; }
-        public int ClassID { get; set; }//
-        public string LastModifier { get; set; }//User Id 
-        private readonly DBConnNET4.clsDBConnection dBConn;
-        public string Creator { get; set; }//User Id 
-        //public clsUser Creator { get; set; }//User Id 
+        public int ClassID { get; set; }
+        public string LastModifier { get; set; }
+        public readonly DBConnNET4.clsDBConnection dBConn;
+        public string Creator { get; set; }
         public clsBusinessObject()
         {
             dBConn = DBConnectionSingleton.GetInstance();
         }
-        public virtual void Read()
+        public virtual short Read()
         {
-            string SQLCommand = "SELECT * FROM T_BusinessObject WHERE ID='" + this.ID + "'";
+            string SQLCommand = $"SELECT ID, C_Description, C_CreationDate, C_ClassID, C_Name, LastModifier, Creator FROM T_BusinessObject WHERE ID='{ID}'";
             string[,] queryResArray = null;
-            int maxRows = 10;
-            short maxColumns = 10;
+            int maxRows = 0;
+            short maxColumns = 0;
             try
             {
-                dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns, 1, 1);
+                short status=dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
                 ID = queryResArray[1, 1];
                 Description = queryResArray[1, 2];
                 CreationDate = DateTime.Parse(queryResArray[1, 3]);
-                ClassID = int.Parse(queryResArray[1, 5]);
-                Name = queryResArray[1, 6];
-                //LastModifier = queryResArray[1, 7];
-                Creator = queryResArray[1, 8];
+                ClassID = int.Parse(queryResArray[1, 4]);
+                Name = queryResArray[1, 5];
+                Creator = queryResArray[1, 7];
+                return status;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during Read:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during read: " + ex.Message);
+                return -1;
             }
         }//Read
-        public virtual void Insert()
+        public virtual short Insert()
         {
-            string SQLCommand = "INSERT INTO T_BusinessObject(ID,C_Description,C_CreationDate, C_ClassID, C_NAME,Creator)VALUES('" + ID + "','" + Description + "','" + CreationDate + "','" + ClassID + "','" + Name + "','" + Creator + "')";
+            string SQLCommand = $"INSERT INTO T_BusinessObject(ID, C_Description, C_CreationDate, C_ClassID, C_NAME, Creator) VALUES ('{ID}', '{Description}', '{CreationDate}', '{ClassID}', '{Name}', '{Creator}')";
             try
             {
-                dBConn.RunSQLCommand(SQLCommand);
+                short status = dBConn.RunSQLCommand(SQLCommand);
+                return status;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during Insert:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during insert: " + ex.Message);
+                return -1;
             }
         }//Insert
-        public virtual void Delete()
+        public virtual short Delete()
         {
-            string SQLCommand = "DELETE FROM T_BusinessObject WHERE ID = '" + this.ID + "'";
+            string SQLCommand = $"DELETE FROM T_BusinessObject WHERE ID = '{ID}'";
             try
             {
-                dBConn.RunSQLCommand(SQLCommand);
+               short status= dBConn.RunSQLCommand(SQLCommand);
+                return status;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                MessageBox.Show("Error occurred during Delete:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during delete: " + ex.Message);
+                return -1;
             }
         }//Delete   
-
-        public virtual void Update()
+        public virtual short Update()
         {
             LastModificationDate = DateTime.Now;
-            string SQLCommand = "UPDATE T_BusinessObject SET C_Description='" + Description + "', C_NAME='" + Name + "', C_ClassID='" + ClassID + "',C_LastModificationDate='" + LastModificationDate + "',LastModifier='" + this.LastModifier + "', Creator='" + Creator + "' WHERE ID = '" + ID + "'";
+            //class id should not be updated
+            string SQLCommand = $"UPDATE T_BusinessObject SET C_Description='{Description}', C_NAME='{Name}', C_ClassID='{ClassID}', C_LastModificationDate='{LastModificationDate}', LastModifier='{LastModifier}', Creator='{Creator}' WHERE ID = '{ID}'";
             try
             {
-                dBConn.RunSQLCommand(SQLCommand);
+                short status = dBConn.RunSQLCommand(SQLCommand);
+                return status;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during Update:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during update: " + ex.Message);
+                return -1;
             }
 
         }//Update

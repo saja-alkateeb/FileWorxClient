@@ -1,6 +1,6 @@
 ﻿namespace FileWorxClient
 {
-    partial class frmUsers
+    partial class frmUser
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUsers));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUser));
             this.lblFullname = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
             this.lblPassword = new System.Windows.Forms.Label();
@@ -44,6 +44,7 @@
             this.btnHide2 = new System.Windows.Forms.Button();
             this.btnShow2 = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
+            this.chBxChangePassword = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblFullname
@@ -54,7 +55,6 @@
             this.lblFullname.Size = new System.Drawing.Size(54, 13);
             this.lblFullname.TabIndex = 0;
             this.lblFullname.Text = "Full Name";
-            this.lblFullname.Click += new System.EventHandler(this.lblFullname_Click);
             // 
             // lblUsername
             // 
@@ -64,7 +64,6 @@
             this.lblUsername.Size = new System.Drawing.Size(60, 13);
             this.lblUsername.TabIndex = 2;
             this.lblUsername.Text = "User Name";
-            this.lblUsername.Click += new System.EventHandler(this.lblUsername_Click);
             // 
             // lblPassword
             // 
@@ -144,7 +143,6 @@
             this.txtConfirmPass.PasswordChar = '*';
             this.txtConfirmPass.Size = new System.Drawing.Size(197, 20);
             this.txtConfirmPass.TabIndex = 7;
-            this.txtConfirmPass.TextChanged += new System.EventHandler(this.txtConfirmPass_TextChanged);
             // 
             // lblConfirmPassword
             // 
@@ -212,11 +210,22 @@
             this.btnEdit.Visible = false;
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
+            // chBxChangePassword
+            // 
+            this.chBxChangePassword.AutoSize = true;
+            this.chBxChangePassword.Location = new System.Drawing.Point(69, 134);
+            this.chBxChangePassword.Name = "chBxChangePassword";
+            this.chBxChangePassword.Size = new System.Drawing.Size(112, 17);
+            this.chBxChangePassword.TabIndex = 14;
+            this.chBxChangePassword.Text = "Change Password";
+            this.chBxChangePassword.UseVisualStyleBackColor = true;
+            // 
             // frmUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(380, 207);
+            this.Controls.Add(this.chBxChangePassword);
             this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnShow2);
             this.Controls.Add(this.btnHide2);
@@ -238,7 +247,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "User";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmUsers_FormClosed);
-            this.Load += new System.EventHandler(this.frmUsers_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -261,5 +269,6 @@
         public System.Windows.Forms.TextBox txtUsername;
         public System.Windows.Forms.TextBox txtPassword;
         public System.Windows.Forms.TextBox txtConfirmPass;
+        private System.Windows.Forms.CheckBox chBxChangePassword;
     }
 }

@@ -59,6 +59,18 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmContactList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmContactList.Designer.cs">
+      <DependentUpon>frmContactList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Contact Properties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Contact Properties.Designer.cs">
+      <DependentUpon>Contact Properties.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmFILEWORX.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,11 +89,11 @@
     <Compile Include="frmLogin.Designer.cs">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmUsers.cs">
+    <Compile Include="frmUser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmUsers.Designer.cs">
-      <DependentUpon>frmUsers.cs</DependentUpon>
+    <Compile Include="frmUser.Designer.cs">
+      <DependentUpon>frmUser.cs</DependentUpon>
     </Compile>
     <Compile Include="frmNews.cs">
       <SubType>Form</SubType>
@@ -97,6 +109,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Contact Properties.resx">
+      <DependentUpon>Contact Properties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmContactList.resx">
+      <DependentUpon>frmContactList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmFILEWORX.resx">
       <DependentUpon>frmFILEWORX.cs</DependentUpon>
     </EmbeddedResource>
@@ -106,8 +124,8 @@
     <EmbeddedResource Include="frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmUsers.resx">
-      <DependentUpon>frmUsers.cs</DependentUpon>
+    <EmbeddedResource Include="frmUser.resx">
+      <DependentUpon>frmUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmNews.resx">
       <DependentUpon>frmNews.cs</DependentUpon>
@@ -139,9 +157,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FXClass\FXClass.csproj">
+    <ProjectReference Include="..\FXClass\FileWorxServer.csproj">
       <Project>{7d94003f-5a7b-4718-b37a-8500ce39b7fb}</Project>
-      <Name>FXClass</Name>
+      <Name>FileWorxServer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

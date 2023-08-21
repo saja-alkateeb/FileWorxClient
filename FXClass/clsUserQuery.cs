@@ -1,7 +1,6 @@
 ﻿using DBConnNET4;
 using System.Collections.Generic;
-
-namespace FileWorxClient
+namespace FileWorxServer
 {
     public class clsUserQuery
     {
@@ -16,14 +15,14 @@ namespace FileWorxClient
         {
             using (var dbConn = new clsDBConnection())
             {
-                string SQLCommand = "SELECT B.C_NAME, B.ID, U.UserName, U.Password " +
-                                    "FROM T_BusinessObject B " +
-                                    "INNER JOIN T_User U ON B.ID = U.ID " +
-                                    "WHERE B.C_ClassID = " + (int)ClassIds.User;
+                string SQLCommand = $"SELECT B.C_NAME, B.ID, U.UserName, U.Password " +
+                                    $"FROM T_BusinessObject B " +
+                                    $"INNER JOIN T_User U ON B.ID = U.ID " +
+                                    $"WHERE B.C_ClassID = {(int)ClassIds.User}";
                 string[,] queryResArray = null;
-                int maxRows = 10;
-                short maxColumns = 10;
-                dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns, 1, 1);
+                int maxRows = 0;
+                short maxColumns = 0;
+                dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
                 for (int row = 1; row <= maxRows; row++)
                 {
                     clsUser User = new clsUser()
@@ -32,8 +31,8 @@ namespace FileWorxClient
                         ID = queryResArray[row, 2],
                         UserName = queryResArray[row, 3],
                         Password = queryResArray[row, 4]
-
-                    }; UserList.Add(User);
+                    };
+                    UserList.Add(User);
 
                 }
             }

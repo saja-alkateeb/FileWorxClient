@@ -1,23 +1,26 @@
 ﻿using DBConnNET4;
 using System;
+using System.Windows.Controls;
 using System.Windows.Forms;
+using FileWorxServer;
 namespace FileWorxClient
 {
-    public partial class frmUsers : Form
+    public partial class frmUser : Form
     {
         private clsUser clsUser;
         DBConnNET4.clsDBConnection dBConn = new clsDBConnection();
-        public frmUsers()
+        private string passwordBox;
+        public frmUser()
         {
             InitializeComponent();
         }
-        public frmUsers(clsUser user)
+        public frmUser(clsUser user)
         {
             InitializeComponent();
             clsUser = user;
             txtUsername.Text = user.UserName;
             txtFullName.Text = user.Name;
-
+            passwordBox = user.Password;
         }
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -35,11 +38,6 @@ namespace FileWorxClient
                 MessageBox.Show("Please enter all the required information.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (fullName.Length > 255 || username.Length > 255 || password.Length > 255 || confirmPassword.Length > 255)
-            {
-                MessageBox.Show("Please enter valid length.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
             if (password == confirmPassword)
             {
                 try
@@ -53,7 +51,11 @@ namespace FileWorxClient
                     userDB.Creator = "root";
                     clsClass classDB = new clsClass();
                     userDB.ClassID = (int)ClassIds.User;
-                    userDB.Insert();
+                    short insertStatus = userDB.Insert();
+                    if (insertStatus != 0)
+                    {
+                        MessageBox.Show("Insert operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                     EmptyFields();
                     this.Close();
                 }
@@ -66,14 +68,6 @@ namespace FileWorxClient
             {
                 MessageBox.Show("The Password confirmation does not match ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-        }
-        private void lblFullname_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void txtConfirmPass_TextChanged(object sender, EventArgs e)
-        {
 
         }
         private void btnShow_Click(object sender, EventArgs e)
@@ -93,31 +87,18 @@ namespace FileWorxClient
                 txtPassword.PasswordChar = '*';
             }
         }
-
         private void frmUsers_FormClosed(object sender, FormClosedEventArgs e)
-
         {
             if (this.Owner is frmUsersInfo userForm)
             {
                 userForm.OnNewObjectAdded(EventArgs.Empty);
             }
-
-        }
-
-        private void lblUsername_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void frmUsers_Load(object sender, EventArgs e)
-        {
-            btnSave.BringToFront();
         }
         public void EmptyFields()
         {
             txtFullName.Text = string.Empty;
             txtUsername.Text = string.Empty;
-            txtPassword.Text = string.Empty;
+            txtPassword.Text =string.Empty;
             txtConfirmPass.Text = string.Empty;
         }
 
@@ -129,7 +110,6 @@ namespace FileWorxClient
                 txtConfirmPass.PasswordChar = '\0';
             }
         }
-
         private void btnHide2_Click(object sender, EventArgs e)
         {
             if (txtConfirmPass.PasswordChar == '\0')
@@ -138,16 +118,22 @@ namespace FileWorxClient
                 txtConfirmPass.PasswordChar = '*';
             }
         }
-
         private void btnEdit_Click(object sender, EventArgs e)
         {
             clsUser.Name = txtFullName.Text;
             clsUser.UserName = txtUsername.Text;
+            if (chBxChangePassword.CheckState== CheckState.Checked)
+            {
+                txtPassword.Text = passwordBox;
+                txtPassword.ReadOnly = false;
+                txtConfirmPass.ReadOnly = false;
+                clsUser.Password = txtPassword.Text;
+                
+            }
             DialogResult dialogResult = MessageBox.Show("Are you sure you want to edit this object?", "Edit Object", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
                 DialogResult = DialogResult.OK;
             Close();
-
         }
     }
 }

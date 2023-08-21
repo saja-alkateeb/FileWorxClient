@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileWorxClient", "FileWorxClient\FileWorxClient.csproj", "{62E165E0-AD9F-4118-BD67-091E80C14F43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FXClass", "FXClass\FXClass.csproj", "{7D94003F-5A7B-4718-B37A-8500CE39B7FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileWorxServer", "FXClass\FileWorxServer.csproj", "{7D94003F-5A7B-4718-B37A-8500CE39B7FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

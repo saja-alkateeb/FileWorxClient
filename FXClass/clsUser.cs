@@ -1,50 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace FileWorxClient
+namespace FileWorxServer
 {
     public class clsUser : clsBusinessObject
     {
         public string UserName { get; set; }
         public string Password { get; set; }
         public bool IsAdmin { get; set; }
-        public List<clsUser> UserList { get; set; } = new List<clsUser>();
-        private readonly DBConnNET4.clsDBConnection dBConn;
-        public clsUser()
-        {
-            dBConn = DBConnectionSingleton.GetInstance();
-        }
-        public override void Insert()
+        public override short Insert()
         {
             try
             {
                 base.Insert();
                 if (!IsUserNameExists(UserName))
                 {
-                    MessageBox.Show("Username already exists. Please choose a different username.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    return;
+                    Console.WriteLine("Username already exists. Please choose a different username.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return -1;
                 }
                 else
                 {
-                    string SQLCommand = "INSERT INTO T_User (ID, UserName,Password) VALUES ('" + base.ID + "','" + UserName + "','" + Password + "')";
-                    dBConn.RunSQLCommand(SQLCommand);
+                    string SQLCommand = $"INSERT INTO T_User (ID, UserName, Password) VALUES ('{ID}', '{UserName}', '{Password}')";
+                    short status=dBConn.RunSQLCommand(SQLCommand);
+                    return status;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while creating the User : " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during insert: " + ex.Message);
+                return -1;
             }
-
         }
         public bool IsUserNameExists(string userName)
         {
-            string SQLCommand = "SELECT * FROM T_User WHERE UserName='" + UserName + "'";
+            string SQLCommand = $"SELECT * FROM T_User WHERE UserName='{UserName}'";
             string[,] queryResArray = null;
-            int maxRows = 100;
-            short maxColumns = 100;
-            dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns, 1, 1);
+            int maxRows = 0;
+            short maxColumns = 0;
+            dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
             if (maxRows > 0)
             {
                 return false;
@@ -53,7 +46,7 @@ namespace FileWorxClient
         }
         public string GetUser(string password)
         {
-            string SQLCommand = "SELECT ID FROM T_User WHERE Password='" + password + "'";
+            string SQLCommand = $"SELECT ID FROM T_User WHERE Password='{password}'";
             string[,] queryResArray = null;
             int maxRows = 100;
             short maxColumns = 100;
@@ -74,11 +67,11 @@ namespace FileWorxClient
             }
 
             // If not "root", check the database for a valid login
-            string SQLCommand = "SELECT * FROM T_User WHERE UserName='" + UserName + "' AND Password='" + Password + "'";
+            string SQLCommand = $"SELECT * FROM T_User WHERE UserName='{UserName}' AND Password='{Password}'";
             string[,] queryResArray = null;
-            int maxRows = 100;
-            short maxColumns = 100;
-            dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns, 1, 1);
+            int maxRows = 0;
+            short maxColumns = 0;
+            dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
             if (maxRows > 0)
             {
                 return true;
@@ -87,37 +80,66 @@ namespace FileWorxClient
             return false;
 
         }//IsLoginValid
-        public override void Read()
+        public string GetUserNameByID(string userID)
+        {
+            try
+            {
+                string SQLCommand = $"SELECT UserName FROM T_User WHERE ID = '{userID}'";
+                string[,] queryResArray = null;
+                int maxRows = 0;
+                short maxColumns = 0;
+                dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
+
+                if (maxRows > 0)
+                {
+                    return queryResArray[1, 1];
+                }
+                else
+                {
+                    return "Unknown User";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occurred while getting user name: " + ex.Message);
+                return "Error";
+            }
+        }//GetUserNameByID
+        public override short Read()
         {
             base.Read();
-            string SQLCommand = "SELECT * FROM T_User WHERE ID='" + base.ID + "'";
+            string SQLCommand = $"SELECT UserName, Password FROM T_User WHERE ID='{ID}'";
             string[,] queryResArray = null;
             int maxRows = 10;
             short maxColumns = 10;
             try
             {
-                dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns, 1, 1);
-                UserName = queryResArray[1, 2];
-                Password = queryResArray[1, 3];
+                short status=dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns, 1, 1);
+                UserName = queryResArray[1, 1];
+                Password = queryResArray[1, 2];
+                return status;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during Read:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during read: " + ex.Message);
+                return -1;
             }
         }//Read
 
-        public override void Update()
+        public override short Update()
         {
             base.Update();
 
-            string SQLCommand = "UPDATE T_User SET UserName='" + UserName + "' WHERE ID = '" + base.ID + "'";
+            string SQLCommand = $"UPDATE T_User SET UserName='{UserName}' WHERE ID = '{ID}'";
             try
             {
-                dBConn.RunSQLCommand(SQLCommand);
+                short status=dBConn.RunSQLCommand(SQLCommand);
+                return status;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during Update:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during update: " + ex.Message);
+                return -1;
             }
 
         }//Update

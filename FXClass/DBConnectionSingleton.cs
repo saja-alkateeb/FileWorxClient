@@ -1,6 +1,6 @@
 ﻿using static DBConnNET4.clsDBConnection;
 
-namespace FileWorxClient
+namespace FileWorxServer
 {
     public class DBConnectionSingleton
     {

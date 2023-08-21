@@ -1,65 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using DBConnNET4;
-using static DBConnNET4.clsDBConnection;
 
-namespace FileWorxClient
+namespace FileWorxServer
 {
-    public class clsFile:clsBusinessObject
+
+    public class clsFile : clsBusinessObject
     {
-        private readonly DBConnNET4.clsDBConnection dBConn;
-        public clsFile()
-        {
-            dBConn = DBConnectionSingleton.GetInstance();
-        }
         public string Body { get; set; }
-        public override void Read()
+        public string FileName { get; set; }
+        public clsPhoto clsPhoto { get; set; }
+        public clsNews clsNews { get; set; }
+        public override short Read()
         {
             base.Read();
-            string SQLCommand = "SELECT * FROM T_File WHERE ID='" + base.ID + "'";
+             string SQLCommand = $"SELECT C_Body FROM T_File WHERE ID='{ID}'";
             string[,] queryResArray = null;
-            int maxRows = 10;
-            short maxColumns = 10;
-            try
+            int maxRows = 0;
+            short maxColumns = 0;
+            try 
             {
-                dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns, 1, 1);
-                Body = queryResArray[1, 2];
+               short status= dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
+                Body = queryResArray[1, 1];
+                return status;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during Read:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during read: " + ex.Message);
+                return -1;
             }
 
         }//Read
-        public override void Insert()
+        public override short Insert()
         {
             base.Insert();
-            string SQLCommand = "INSERT INTO T_File (ID, C_Body) VALUES ('"+ base.ID + "','"+ Body + "')";
+            string SQLCommand = $"INSERT INTO T_File (ID, C_Body) VALUES ('{ID}', '{Body}')";
             try
             {
-                dBConn.RunSQLCommand(SQLCommand);
+               short status= dBConn.RunSQLCommand(SQLCommand);
+                return status;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during Insert:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during insert: " + ex.Message);
+                return -1;
             }
         }//Insert
-        public override void Update ()
+        public override short Update()
         {
             base.Update();
-            string SQLCommand = "UPDATE T_File SET C_Body='" + Body + "' WHERE ID = '" + base.ID + "'";
+            string SQLCommand = $"UPDATE T_File SET C_Body = '{Body}' WHERE ID = '{ID}'";
             try
             {
-                dBConn.RunSQLCommand(SQLCommand);
+                short status = dBConn.RunSQLCommand(SQLCommand);
+                return status;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during Update:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during insert: " + ex.Message);
+                return -1;
             }
-        }
+        }//Update
     }
 }

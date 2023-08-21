@@ -1,68 +1,67 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
-namespace FileWorxClient
+namespace FileWorxServer
 {
     public class clsPhoto : clsFile
     {
         public string PhotoPath { get; set; }
         public string PhotoPathCopy { get; set; }
-
-        public List<clsPhoto> PhotoList { get; set; } = new List<clsPhoto>();
-        private readonly DBConnNET4.clsDBConnection dBConn;
-        public clsPhoto()
-        {
-            dBConn = DBConnectionSingleton.GetInstance();
-        }
-        public override void Read()
+        string separator = Constants.Separator;
+        public override short Read()
         {
             base.Read();
-            string SQLCommand = "SELECT * FROM T_Photo WHERE ID='" + base.ID + "'";
+            string SQLCommand = $"SELECT PhotoPath, PhotoPathCopy FROM T_Photo WHERE ID='{ID}'";
             string[,] queryResArray = null;
-            int maxRows = 10;
-            short maxColumns = 10;
+            int maxRows = 0;
+            short maxColumns = 0;
             try
             {
-                dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns, 1, 1);
-                PhotoPath = queryResArray[1, 2];
-                PhotoPathCopy = queryResArray[1, 3];
+               short status= dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
+                PhotoPath = queryResArray[1, 1];
+                PhotoPathCopy = queryResArray[1, 2];
+                return status;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during Read:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during read: " + ex.Message);
+                return -1;
             }
         }//Read
-        public override void Insert()
+        public override short Insert()
         {
 
             base.Insert();
-            string SQLCommand = "INSERT INTO T_Photo (ID, PhotoPath, PhotoPathCopy) VALUES ('" + base.ID + "','" + PhotoPath + "','" + PhotoPathCopy + "')";
+            string SQLCommand = $"INSERT INTO T_Photo (ID, PhotoPath, PhotoPathCopy) VALUES ('{ID}', '{PhotoPath}', '{PhotoPathCopy}')";
             try
             {
-                dBConn.RunSQLCommand(SQLCommand);
+                short status=dBConn.RunSQLCommand(SQLCommand);
+                return status;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during Insert:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during insert: " + ex.Message);
+                return -1;
             }
         }//insert
 
-        public override void Update()
+        public override short Update()
         {
             base.Update();
-            string SQLCommand = "UPDATE T_Photo SET PhotoPath='" + PhotoPath + "', PhotoPathCopy='" + PhotoPathCopy + "' WHERE ID = '" + base.ID + "'";
+            string SQLCommand = $"UPDATE T_Photo SET PhotoPath='{PhotoPath}', PhotoPathCopy='{PhotoPathCopy}' WHERE ID = '{ID}'";
             try
             {
-                dBConn.RunSQLCommand(SQLCommand);
+               short status= dBConn.RunSQLCommand(SQLCommand);
+                return status;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during Update:", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during update: " + ex.Message);
+                return -1;
             }
         }//Update
-        public override void Delete()
+        public override short Delete()
         {
             base.Delete();
             try
@@ -76,13 +75,34 @@ namespace FileWorxClient
                 {
                     File.Delete(PhotoPathCopy);
                 }
+                return 0;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error occurred during file deletion: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error occurred during file deletion: " + ex.Message);
+                return -1;
             }
         }//Delete
-
+        public void AddPhotoToFile(string content, string fileName)
+        {
+            string[] photoParts = content.Split(new[] { separator }, StringSplitOptions.None);
+            Name = photoParts[0];
+            CreationDate = DateTime.Parse(photoParts[1]);
+            Description = photoParts[2];
+            PhotoPath = photoParts[3];
+            Body = photoParts[4];
+            LastModifier = photoParts[5];
+            string copiedFileName = Path.Combine("ImageCopies", Guid.NewGuid().ToString() + Path.GetExtension(PhotoPath));
+            string destinationPath = Path.Combine(Application.StartupPath, copiedFileName);
+            Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
+            File.Copy(PhotoPath, destinationPath);
+            PhotoPathCopy = destinationPath;
+            clsClass classDB = new clsClass();
+            ClassID = (int)ClassIds.Photo;
+            ID = Guid.NewGuid().ToString();
+            FileName = fileName;
+            Insert();
+        }
 
     }
 }
