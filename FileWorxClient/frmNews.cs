@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
+using Elastic.Clients.Elasticsearch.QueryDsl;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -15,13 +18,18 @@ using System.Windows.Forms;
 using static DBConnNET4.clsDBConnection;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using static System.Net.Mime.MediaTypeNames;
+using Elasticsearch.Net;
+using Nest;
 
 namespace FileWorxClient
 {
-    public partial class frmNews :Form
+    public partial class frmNews : Form
     {
         private clsNews clsNews;
+        private clsUser user;
         public string NewsId { get; set; }
+
         public frmNews()
         {
             InitializeComponent();
@@ -41,7 +49,7 @@ namespace FileWorxClient
         {
             this.Close();
         }
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
             string title = txtTitle.Text;
             string description = txtDescription.Text;
@@ -79,6 +87,7 @@ namespace FileWorxClient
                 if (!string.IsNullOrEmpty(NewsId))
                 {
                     short updateStatus = newsDB.Update();
+                     await newsDB.UpdateNewsInElasticsearchAsync(newsDB);
                     if (updateStatus != 0)
                     {
                         MessageBox.Show("Update operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -92,21 +101,36 @@ namespace FileWorxClient
                         MessageBox.Show("Insert operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                DialogResult = DialogResult.OK;
-                this.Close();
+                var NewsES = new clsNews
+                {
+                    ID = newsDB.ID,
+                    Name = title,
+                    Description = description,
+                    Body = body,
+                    CreationDate = creationDate,
+                    Category = category,
+                    ClassID = (int)ClassIds.News
+                };
+                clsNews news = new clsNews();
+                await news.InsertNewsInElasticsearchAsync(NewsES);
             }
+
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while creating/editing the news: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            DialogResult = DialogResult.OK;
+            this.Close();
         }
-        public void EmptyFields()
-        {
-            txtTitle.Text = string.Empty;
-            txtDescription.Text = string.Empty;
-            cmboCategory.Text = string.Empty;
-            rtbBody.Clear();
-        }
+        
+          private void EmptyFields()
+          {
+               txtTitle.Text = string.Empty;
+               txtDescription.Text = string.Empty;
+               cmboCategory.Text = string.Empty;
+               rtbBody.Clear();
+          }
+        
         private void FillFields()
         {
             txtTitle.Text = clsNews.Name;

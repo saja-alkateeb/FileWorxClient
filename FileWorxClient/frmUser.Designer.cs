@@ -43,8 +43,7 @@
             this.btnShow = new System.Windows.Forms.Button();
             this.btnHide2 = new System.Windows.Forms.Button();
             this.btnShow2 = new System.Windows.Forms.Button();
-            this.btnEdit = new System.Windows.Forms.Button();
-            this.chBxChangePassword = new System.Windows.Forms.CheckBox();
+            this.chkEnableEditPassword = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblFullname
@@ -197,36 +196,23 @@
             this.btnShow2.UseVisualStyleBackColor = false;
             this.btnShow2.Click += new System.EventHandler(this.btnShow2_Click);
             // 
-            // btnEdit
+            // chkEnableEditPassword
             // 
-            this.btnEdit.BackColor = System.Drawing.SystemColors.Control;
-            this.btnEdit.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnEdit.Location = new System.Drawing.Point(252, 161);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(56, 34);
-            this.btnEdit.TabIndex = 13;
-            this.btnEdit.Text = "Save";
-            this.btnEdit.UseVisualStyleBackColor = false;
-            this.btnEdit.Visible = false;
-            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            this.chkEnableEditPassword.AutoSize = true;
+            this.chkEnableEditPassword.Location = new System.Drawing.Point(69, 134);
+            this.chkEnableEditPassword.Name = "chkEnableEditPassword";
+            this.chkEnableEditPassword.Size = new System.Drawing.Size(112, 17);
+            this.chkEnableEditPassword.TabIndex = 14;
+            this.chkEnableEditPassword.Text = "Change Password";
+            this.chkEnableEditPassword.UseVisualStyleBackColor = true;
+            this.chkEnableEditPassword.CheckedChanged += new System.EventHandler(this.chkEnableEditPassword_CheckedChanged);
             // 
-            // chBxChangePassword
-            // 
-            this.chBxChangePassword.AutoSize = true;
-            this.chBxChangePassword.Location = new System.Drawing.Point(69, 134);
-            this.chBxChangePassword.Name = "chBxChangePassword";
-            this.chBxChangePassword.Size = new System.Drawing.Size(112, 17);
-            this.chBxChangePassword.TabIndex = 14;
-            this.chBxChangePassword.Text = "Change Password";
-            this.chBxChangePassword.UseVisualStyleBackColor = true;
-            // 
-            // frmUsers
+            // frmUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(380, 207);
-            this.Controls.Add(this.chBxChangePassword);
-            this.Controls.Add(this.btnEdit);
+            this.Controls.Add(this.chkEnableEditPassword);
             this.Controls.Add(this.btnShow2);
             this.Controls.Add(this.btnHide2);
             this.Controls.Add(this.btnShow);
@@ -243,10 +229,10 @@
             this.Controls.Add(this.lblFullname);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MinimumSize = new System.Drawing.Size(18, 45);
-            this.Name = "frmUsers";
+            this.Name = "frmUser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "User";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmUsers_FormClosed);
+            this.Load += new System.EventHandler(this.frmUser_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -263,12 +249,11 @@
         private System.Windows.Forms.Button btnShow;
         private System.Windows.Forms.Button btnHide2;
         private System.Windows.Forms.Button btnShow2;
-        public System.Windows.Forms.Button btnEdit;
         public System.Windows.Forms.Button btnSave;
         public System.Windows.Forms.TextBox txtFullName;
         public System.Windows.Forms.TextBox txtUsername;
         public System.Windows.Forms.TextBox txtPassword;
         public System.Windows.Forms.TextBox txtConfirmPass;
-        private System.Windows.Forms.CheckBox chBxChangePassword;
+        private System.Windows.Forms.CheckBox chkEnableEditPassword;
     }
 }

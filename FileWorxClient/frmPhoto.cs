@@ -4,13 +4,18 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Windows.Forms;
 using FileWorxServer;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.QueryDsl;
+using Elastic.Transport;
+using System.Threading.Tasks;
+
 namespace FileWorxClient
 {
     public partial class frmPhoto : Form
     {
-        private string photoPathCopy;
-        public string PhotoID { get; set; }
+        public string PhotoID { get; set;}
         private clsPhoto clsPhoto;
+        public string photoPathCopy;
         public frmPhoto()
         {
             InitializeComponent();
@@ -22,7 +27,7 @@ namespace FileWorxClient
             PhotoID = photo.ID;
             FillFields();
         }
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
             string title = txtTitle.Text;
             string description = txtDescription.Text;
@@ -64,6 +69,7 @@ namespace FileWorxClient
                 if (!string.IsNullOrEmpty(PhotoID))
                 {
                     short updateStatus = photoDB.Update();
+                    await photoDB.UpdatePhotoInElasticsearchAsync(photoDB);
                     if (updateStatus != 0)
                     {
                         MessageBox.Show("Update operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -78,16 +84,27 @@ namespace FileWorxClient
                     }
                 }
 
-                EmptyFields();
-                DialogResult = DialogResult.OK;
-                this.Close();
-            }
+            var clsPhoto = new clsPhoto
+            {
+                ID = photoDB.ID,
+                Name = title,
+                Description = description,
+                Body = body,
+                CreationDate = creationDate,
+                PhotoPath = pictureLocation,
+                PhotoPathCopy = photoPathCopy,
+                ClassID = (int)ClassIds.Photo
+            };
+                clsPhoto photo = new clsPhoto();
+                await photo.InsertPhotoInElasticsearchAsync(clsPhoto);
+        }
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while creating/editing the photo: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            DialogResult = DialogResult.OK;
+            this.Close();
         }
-
         private void btnCancel_Click(object sender, EventArgs e)
         {
             EmptyFields();
@@ -119,14 +136,14 @@ namespace FileWorxClient
                 }
             }
         }
-        public void EmptyFields()
+        private void EmptyFields()
         {
             txtTitle.Text = string.Empty;
             txtDescription.Text = string.Empty;
             txtLocation.Text = string.Empty;
             rtbBody.Clear();
         }
-        public void FillFields()
+        private void FillFields()
         {
             txtTitle.Text = clsPhoto.Name;
             txtDescription.Text = clsPhoto.Description;

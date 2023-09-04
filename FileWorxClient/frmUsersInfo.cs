@@ -1,33 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.QueryDsl;
+using Elastic.Transport;
 using FileWorxServer;
 namespace FileWorxClient
 {
     public partial class frmUsersInfo : Form
     {
-        public string ID { get; set; }
         string separator = Constants.Separator;
-        public delegate void NewObjectAddedEventHandler(object sender, EventArgs e);
-        public event NewObjectAddedEventHandler NewObjectAdded;
         public frmUsersInfo()
         {
             InitializeComponent();
-            this.NewObjectAdded += frmUsersInfo_NewObjectAdded;
         }
         private void frmUsersInfo_Load(object sender, EventArgs e)
         {
-            this.MinimumSize = new System.Drawing.Size(450, 450);
             PopulateListView();
-        }
-        private void frmUsersInfo_NewObjectAdded(object sender, EventArgs e)
-        {
-            lstViewUsers.Items.Clear();
-            PopulateListView();
-        }
-        public void OnNewObjectAdded(EventArgs e)
-        {
-            NewObjectAdded?.Invoke(this, e);
         }
         private void lstViewUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -40,7 +30,7 @@ namespace FileWorxClient
                 clsUser User = new clsUser();
                 clsUserQuery UserQuery = new clsUserQuery();
                 UserQuery.QClasses = ClassIds.User;
-                UserQuery.Run();
+                UserQuery.RunDB();
                 List<clsUser> userList = UserQuery.UserList;
                 foreach (clsUser user in userList)
                 {
@@ -55,7 +45,7 @@ namespace FileWorxClient
                 MessageBox.Show("An error occurred while populating the users: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void mnuDelete_Click(object sender, EventArgs e)
+        private async void mnuDelete_Click(object sender, EventArgs e)
         {
             try
             {
@@ -69,6 +59,8 @@ namespace FileWorxClient
                     {
                         clsBusinessObject.ID = Id;
                         short deleteStatus = clsBusinessObject.Delete();
+                        clsUser user = new clsUser();   
+                        await user.DeleteUserFromElasticsearchAsync(Id);
                         if (deleteStatus != 0)
                         {
                             MessageBox.Show("Delete operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -93,14 +85,15 @@ namespace FileWorxClient
         {
             this.Close();
         }
-
         private void btnCreare_Click(object sender, EventArgs e)
         {
-            frmUser frmUsers = new frmUser()
-            {
-                Owner = this
-            };
+            frmUser frmUsers = new frmUser();
             frmUsers.ShowDialog();
+            if (frmUsers.DialogResult == DialogResult.OK)
+            {
+                lstViewUsers.Items.Clear();
+                PopulateListView();
+            }
         }
 
         private void lstViewUsers_DoubleClick(object sender, EventArgs e)
@@ -108,35 +101,71 @@ namespace FileWorxClient
             if (lstViewUsers.FocusedItem != null)
             {
                 ListViewItem selectedItem = lstViewUsers.FocusedItem;
-                string tag = selectedItem.Tag.ToString();
-                ID = tag;
-                string id = tag;
-                clsUser clsUser = new clsUser();
-                clsUser.ID = id;
-                clsUser.LastModifier = clsUser.ID;
-                short readStatus = clsUser.Read();
+                string id = selectedItem.Tag.ToString();  // Get the user's ID
+
+                clsUser userDB = new clsUser();
+                userDB.ID = id;
+                short readStatus = userDB.Read();
                 if (readStatus != 0)
                 {
                     MessageBox.Show("Read operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
-                frmUser frmUsers = new frmUser(clsUser);
-                frmUsers.btnEdit.Visible = true;
-                frmUsers.btnSave.Visible = false;
-                frmUsers.txtPassword.ReadOnly = true;
-                frmUsers.txtConfirmPass.ReadOnly = true;
+                frmUser frmUsers = new frmUser(userDB);
+
                 if (frmUsers.ShowDialog() == DialogResult.OK)
                 {
-                    selectedItem.SubItems[0].Text = frmUsers.txtFullName.Text;
-                    selectedItem.SubItems[1].Text = frmUsers.txtUsername.Text;
-                   short updateStatus= clsUser.Update();
-                    if (updateStatus != 0)
-                    {
-                        MessageBox.Show("Update operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    lstViewUsers.FullRowSelect = true;
+                    lstViewUsers.Items.Clear();
+                    lstViewUsers.Refresh();
+                    PopulateListView();
                 }
             }
+        }
+        private async Task LoadUsersFromElasticsearchAsync()
+        {
+            clsUserQuery userQuery = new clsUserQuery();
+            await userQuery.RunES();
+            List<clsUser> userList = userQuery.UserList;
+            foreach (clsUser user in userList)
+            {
+                ListViewItem item = new ListViewItem(user.Name);
+                item.SubItems.Add(user.UserName);
+                item.Tag = user.ID;
+                lstViewUsers.Items.Add(item);
+            }
+        }
+        private void LoadUsersFromDataBase()
+        {
+            clsUserQuery userQuery = new clsUserQuery();
+            userQuery.RunDB();
+            List<clsUser> userList = userQuery.UserList;
+            foreach (clsUser user in userList)
+            {
+                ListViewItem item = new ListViewItem(user.Name);
+                item.SubItems.Add(user.UserName);
+                item.Tag = user.ID;
+                lstViewUsers.Items.Add(item);
+            }
+        }
 
+        private async void radioBtnES_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioBtnES.Checked)
+            {
+                lstViewUsers.Items.Clear();
+                lstViewUsers.Refresh();
+                await LoadUsersFromElasticsearchAsync();
+            }
+        }
+
+        private void radioBtnDB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioBtnDB.Checked)
+            {
+                lstViewUsers.Items.Clear();
+                lstViewUsers.Refresh();
+                LoadUsersFromDataBase();
+            }
         }
     }
 }

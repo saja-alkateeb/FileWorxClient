@@ -7,8 +7,11 @@ namespace FileWorxServer
     {
         public string Body { get; set; }
         public string FileName { get; set; }
-        public clsPhoto clsPhoto { get; set; }
-        public clsNews clsNews { get; set; }
+        public clsPhoto Photo { get; set; }
+        public clsNews News { get; set; }
+        public string PhotoPath { get;  set; }
+        public string Category { get;  set; }
+
         public override short Read()
         {
             base.Read();

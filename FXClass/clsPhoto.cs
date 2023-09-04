@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
+using Elastic.Clients.Elasticsearch.QueryDsl;
 namespace FileWorxServer
 {
     public class clsPhoto : clsFile
@@ -9,6 +12,7 @@ namespace FileWorxServer
         public string PhotoPath { get; set; }
         public string PhotoPathCopy { get; set; }
         string separator = Constants.Separator;
+        private readonly ElasticsearchClient _client = new clsElasticsearchClientFactory().CreateClient();
         public override short Read()
         {
             base.Read();
@@ -102,6 +106,49 @@ namespace FileWorxServer
             ID = Guid.NewGuid().ToString();
             FileName = fileName;
             Insert();
+        }
+        public async Task<bool> UpdatePhotoInElasticsearchAsync(clsPhoto photo)
+        {
+            var response = await _client.UpdateAsync<clsPhoto, clsPhoto>("my-photo-index", photo.ID, u => u
+                .Doc(photo));
+
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during update: ");
+                return false;
+            }
+        }
+        public async Task<bool> DeletePhotoFromElasticsearchAsync(string photoId)
+        {
+            var response = await _client.DeleteAsync("my-photo-index", photoId);
+
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during delete: ");
+                return false;
+            }
+        }
+        public async Task<bool> InsertPhotoInElasticsearchAsync(clsPhoto photo)
+        {
+            var response = await _client.IndexAsync(photo, "my-photo-index");
+
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during insert: ");
+                return false;
+            }
         }
 
     }

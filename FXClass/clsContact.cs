@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FileWorxServer
@@ -13,13 +16,15 @@ namespace FileWorxServer
         public string FolderLocation { get; set; }
         string separator = Constants.Separator;
         public ContactDirection Direction { get; set; }
+        private readonly ElasticsearchClient _client = new clsElasticsearchClientFactory().CreateClient();
         public List<clsContact> contacts { get; private set; }
         public clsContact()
         {
             contacts = new List<clsContact>();
-        }//Constructor
+        }
         public override short Read()
         {
+            base.Read();
             string SQLCommand = $"SELECT ID, FolderLocation, ContactDirection FROM T_Contact WHERE ID = '{ID}'";
             string[,] queryResArray = null;
             int maxRows = 0;
@@ -28,9 +33,8 @@ namespace FileWorxServer
             {
                 short status=dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
                 ID = queryResArray[1, 1];
-                Name = queryResArray[1, 2];
-                FolderLocation = queryResArray[1, 3];
-                Direction = (ContactDirection)Enum.Parse(typeof(ContactDirection), queryResArray[1, 4]);
+                FolderLocation = queryResArray[1, 2];
+                Direction = (ContactDirection)Enum.Parse(typeof(ContactDirection), queryResArray[1, 3]);
                 return status;
             }
             catch (Exception ex)
@@ -41,12 +45,12 @@ namespace FileWorxServer
         }//Read
         public bool ContactExistsInDatabase(string contactID)
         {
-            string SQLCommand = $"SELECT COUNT(*) FROM T_Contact WHERE ID = '{contactID}'";
+            string SQLCommand = $"SELECT ID FROM T_Contact WHERE ID = '{contactID}'";
             string[,] queryResArray = null;
             int maxRows = 0;
             short maxColumns = 0;
             dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
-            return maxRows > 1;
+            return maxRows == 1;
         }//ContactExistsInDatabase
         public override short Insert()
         {
@@ -56,6 +60,14 @@ namespace FileWorxServer
             try
             {
                 short status = dBConn.RunSQLCommand(SQLCommand);
+                string updateSQLCommand = $"UPDATE T_Contact " +
+                    $"SET ContactDirectionInt = CASE " +
+                    $"    WHEN ContactDirection = 'TX' THEN 0 " +
+                    $"    WHEN ContactDirection = 'RX' THEN 1 " +
+                    $"    ELSE -1 " +
+                    $"END " +
+                    $"WHERE ID = '{ID}'";
+                dBConn.RunSQLCommand(updateSQLCommand);
                 return status;
             }
             catch (Exception ex)
@@ -67,8 +79,8 @@ namespace FileWorxServer
         public override short Update()
         {
             base.Update();
-            string SQLCommand = $"UPDATE T_Contact SET Name='{Name}', FolderLocation='{FolderLocation}', " +
-                        $"Direction='{Direction}' WHERE ID='{ID}'";
+            string SQLCommand = $"UPDATE T_Contact SET  FolderLocation='{FolderLocation}', " +
+                        $"ContactDirection='{Direction}' WHERE ID='{ID}'";
             try
             {
                 short status = dBConn.RunSQLCommand(SQLCommand);
@@ -76,7 +88,7 @@ namespace FileWorxServer
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error occurred during  update: " + ex.Message);
+                Console.WriteLine("Error occurred during update: " + ex.Message);
                 return -1;
             }
         }//Update
@@ -89,15 +101,14 @@ namespace FileWorxServer
             try
             {
                 clsContactQuery contactQuery = new clsContactQuery();
-                contactQuery.Run();
-
-                foreach (var rxContact in contactQuery.contacts.Where(c => c.Direction == ContactDirection.RX))
+                contactQuery.RunDB();
+                foreach (var rxContact in contactQuery.Contacts.Where(c => c.Direction == ContactDirection.RX))
                 {
                     string folderPath = rxContact.FolderLocation;
 
                     if (!Directory.Exists(folderPath))
                     {
-                        throw new DirectoryNotFoundException($"Folder does not exist: {folderPath}");
+                        continue;
                     }
 
                     DateTime lastReceptionTime = GetLastReceptionTime(folderPath);
@@ -183,7 +194,6 @@ namespace FileWorxServer
         public short UpdateLastReceptionTime(string folderPath, DateTime newReceptionTime)
         {
             string SQLCommand = $"UPDATE T_Contact SET LastReceptionDate = '{newReceptionTime}' WHERE FolderLocation = '{folderPath}'";
-
             try
             {
                 short status = dBConn.RunSQLCommand(SQLCommand);
@@ -203,7 +213,6 @@ namespace FileWorxServer
                 string[] tagParts = tag.Split('|');
                 string fileType = tagParts[0];
                 string id = tagParts[1];
-
                 string data = GetDataForItem(fileType, id);
                 string imagePath = (fileType == "Photos") ? GetImagePath(id) : null;
                 SaveDataForContacts(data, selectedContacts);
@@ -262,6 +271,49 @@ namespace FileWorxServer
                 File.WriteAllText(targetFilePath, data);
             }
         }//SaveDataForContacts
+        public async Task<bool> UpdateContactInElasticsearchAsync(clsContact contact)
+        {
+            var response = await _client.UpdateAsync<clsContact, clsContact>("my-contact-index", contact.ID, u => u
+                .Doc(contact));
+
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during update: ");
+                return false;
+            }
+        }
+        public async Task<bool> DeleteContactFromElasticsearchAsync(string contactId)
+        {
+            var response = await _client.DeleteAsync("my-contact-index", contactId);
+
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during delete: ");
+                return false;
+            }
+        }
+        public async Task<bool> InsertContactInElasticsearchAsync(clsContact contact)
+        {
+            var response = await _client.IndexAsync(contact, "my-contact-index");
+
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during insert: ");
+                return false;
+            }
+        }
     }
     public enum ContactDirection
     {

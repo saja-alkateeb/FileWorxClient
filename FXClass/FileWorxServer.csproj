@@ -34,6 +34,12 @@
     <Reference Include="DBConnNET4">
       <HintPath>..\..\..\..\..\..\..\..\OneDrive - Systems and Electronics Development FZCO\Documents\DbConn\DbConn\DBConnNET4.dll</HintPath>
     </Reference>
+    <Reference Include="Elastic.Clients.Elasticsearch">
+      <HintPath>..\packages\Elastic.Clients.Elasticsearch.8.9.2\lib\net461\Elastic.Clients.Elasticsearch.dll</HintPath>
+    </Reference>
+    <Reference Include="Elastic.Transport">
+      <HintPath>..\packages\Elastic.Transport.0.4.14\lib\net462\Elastic.Transport.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -49,6 +55,7 @@
     <Compile Include="clsClass.cs" />
     <Compile Include="clsContact.cs" />
     <Compile Include="clsContactQuery.cs" />
+    <Compile Include="clsElasticsearchClientFactory.cs" />
     <Compile Include="clsFile.cs" />
     <Compile Include="clsFilesQuery.cs" />
     <Compile Include="clsNews.cs" />
@@ -58,6 +65,9 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DBConnectionSingleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

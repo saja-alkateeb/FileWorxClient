@@ -7,6 +7,10 @@ using System.Data.SqlTypes;
 using FileWorxServer;
 using System.Diagnostics;
 using System.Xml;
+using System.Threading.Tasks;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.QueryDsl;
+using Elastic.Transport;
 
 namespace FileWorxClient
 {
@@ -23,31 +27,26 @@ namespace FileWorxClient
         {
             InitializeComponent();
         }
-        public void lstViewUsers_SelectedIndexChanged(object sender, EventArgs e)
+        private void lstViewUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
             lstViewObjects.FullRowSelect = true;
+
             if (lstViewObjects.SelectedItems.Count > 0)
             {
                 CheckFolderType();
             }
-            else if (lstViewObjects.SelectedItems.Count <= 0)
+            else
             {
                 EmptyFields();
                 if (!tCtrlPreview.Controls.Contains(tabPage2))
                     tCtrlPreview.Controls.Add(tabPage2);
             }
         }
-        private void frmFILEWORX_NewObjectAdded(object sender, EventArgs e)
-        {
-            lstViewObjects.Items.Clear();
-            PopulateListView();
-        }
-        public void PopulateListView()
+        private void PopulateListView(List<ClassIds> classFilters)
         {
             var filesQuery = new clsFilesQuery();
-            filesQuery.Run();
+            filesQuery.RunDB(classFilters);
             List<clsFile> fileList = filesQuery.FileDataList;
-
             foreach (clsFile file in fileList)
             {
                 ListViewItem item = new ListViewItem(file.Name);
@@ -55,50 +54,84 @@ namespace FileWorxClient
                 item.SubItems.Add(file.Description);
                 item.SubItems.Add(file.Creator);
                 Debug.WriteLine(file.GetType().Name);
-                if (file.clsPhoto != null)
+                if (file.Photo != null)
                 {
                     item.Tag = $"Photos|{file.ID}";
                 }
-                else if (file.clsNews != null)
+                else if (file.News != null)
                 {
                     item.Tag = $"News|{file.ID}";
                 }
-
                 lstViewObjects.Items.Add(item);
             }
         }
-
-
-        private ClassIds currentFilter = ClassIds.All;
-        public void CheckFolderType()
+        private void PopulateListView()
         {
-            string tag = lstViewObjects.SelectedItems[0].Tag.ToString();
-            string[] tagParts = tag.Split('|');
-            string filetype = tagParts[0];
-            string id = tagParts[1];
-            if (filetype == "Photos")
+            var filesQuery = new clsFilesQuery();
+            filesQuery.RunDB(currentFilter);
+            List<clsFile> fileList = filesQuery.FileDataList;
+            foreach (clsFile file in fileList)
             {
-                var photoDB = new clsPhoto();
-                photoDB.ID = id;
-                short readStatus=photoDB.Read();
-                if (readStatus != 0)
+                ListViewItem item = new ListViewItem(file.Name);
+                item.SubItems.Add(file.CreationDate.ToString());
+                item.SubItems.Add(file.Description);
+                item.SubItems.Add(file.Creator);
+                Debug.WriteLine(file.GetType().Name);
+                if (file.Photo != null)
                 {
-                    MessageBox.Show("Read operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    item.Tag = $"Photos|{file.ID}";
                 }
-                DisplayPhotoPreview(photoDB);
+                else if (file.News != null)
+                {
+                    item.Tag = $"News|{file.ID}";
+                }
+                lstViewObjects.Items.Add(item);
             }
-            else//news
+        }
+        private List<ClassIds> currentFilter = new List<ClassIds>();
+
+        private void CheckFolderType()
+        {
+            if (lstViewObjects.SelectedItems.Count > 0)
             {
-                var newsDB = new clsNews();
-                newsDB.ID = id;
-                short readStatus=newsDB.Read();
-                if (readStatus != 0)
+                ListViewItem selectedItem = lstViewObjects.SelectedItems[0];
+                if (selectedItem.Tag != null)
                 {
-                    MessageBox.Show("Read operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    string tag = selectedItem.Tag.ToString();
+                    string[] tagParts = tag.Split('|');
+                    string filetype = tagParts[0];
+                    string id = tagParts[1];
+
+                    if (filetype == "Photos")
+                    {
+                        var photoDB = new clsPhoto();
+                        photoDB.ID = id;
+                        short readStatus = photoDB.Read();
+                        if (readStatus != 0)
+                        {
+                            MessageBox.Show("Read operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        DisplayPhotoPreview(photoDB);
+                    }
+                    else if (filetype == "News")
+                    {
+                        var newsDB = new clsNews();
+                        newsDB.ID = id;
+                        short readStatus = newsDB.Read();
+                        if (readStatus != 0)
+                        {
+                            MessageBox.Show("Read operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        DisplayNewsPreview(newsDB);
+                    }
                 }
-                DisplayNewsPreview(newsDB);
+                else
+                {
+                    MessageBox.Show("Selected item does not have a valid tag.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-        }//CheckFolderType
+        }
+
         private void DisplayPhotoPreview(clsPhoto photoDB)
         {
             txtTiltle.Text = photoDB.Name;
@@ -117,7 +150,7 @@ namespace FileWorxClient
             tCtrlPreview.TabPages.Remove(tabPage2);
             picImage.Image = null;
         }
-        public void EmptyFields()
+        private void EmptyFields()
         {
             txtTiltle.Text = null;
             txtCreationDate.Text = null;
@@ -127,10 +160,7 @@ namespace FileWorxClient
         }
         public void frmFILEWORX_Load(object sender, EventArgs e)
         {
-            int splitterDistance = (int)(spltContainer.Panel2.Height * (2.5 / 4.0));
-            spltContainer.SplitterDistance = splitterDistance;
             PopulateListView();
-            this.MinimumSize = new System.Drawing.Size(500, 500);
         }
         private void mnuDelete2_Click(object sender, EventArgs e)
         {
@@ -160,8 +190,8 @@ namespace FileWorxClient
                     EmptyFields();
                 }
             }
-         }
-        private void DeletePhotoItem(string ID)
+        }
+        private async void DeletePhotoItem(string ID)
         {
             var photoDB = new clsPhoto();
             photoDB.ID = ID;
@@ -177,10 +207,14 @@ namespace FileWorxClient
                 File.Delete(photoDB.PhotoPathCopy);
             }
             DeleteBusinessObject(ID);
+            clsPhoto clsPhoto = new clsPhoto();
+            await clsPhoto.DeletePhotoFromElasticsearchAsync(ID);
         }
-        private void DeleteNewsItem(string ID)
+        private async void DeleteNewsItem(string ID)
         {
             DeleteBusinessObject(ID);
+            clsNews clsNews = new clsNews();
+            await clsNews.DeleteNewsFromElasticsearchAsync(ID);
         }
         private void DeleteBusinessObject(string ID)
         {
@@ -192,14 +226,12 @@ namespace FileWorxClient
                 MessageBox.Show("Delete operation failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void mnuRelogin_Click_1(object sender, EventArgs e)
         {
             this.Hide();
             var frmLogin = new frmLogin();
             frmLogin.Show();
         }
-
         private void mnuNews_Click(object sender, EventArgs e)
         {
             var frmNews = new frmNews();
@@ -210,7 +242,6 @@ namespace FileWorxClient
                 PopulateListView();
             }
         }
-
         private void mnuPhotos_Click(object sender, EventArgs e)
         {
             var frmPhoto = new frmPhoto();
@@ -221,7 +252,6 @@ namespace FileWorxClient
                 PopulateListView();
             }
         }
-
         private void frmFILEWORX_FormClosed_1(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
@@ -251,19 +281,7 @@ namespace FileWorxClient
                 var frmPhoto = new frmPhoto(photoDB);
                 if (frmPhoto.ShowDialog() == DialogResult.OK)
                 {
-                    lstViewObjects.FullRowSelect = true;
-                    if (lstViewObjects.SelectedItems.Count > 0)
-                    {
-                        CheckFolderType();
-                        lstViewObjects.Items.Clear();
-                        PopulateListView();
-                    }
-                    else if (lstViewObjects.SelectedItems.Count <= 0)
-                    {
-                        EmptyFields();
-                        if (!tCtrlPreview.Controls.Contains(tabPage2))
-                            tCtrlPreview.Controls.Add(tabPage2);
-                    }
+                    HandleListViewSelection();
                 }
             }
             else if (fileType == "News")
@@ -279,50 +297,72 @@ namespace FileWorxClient
                 var frmNews = new frmNews(newsDB);
                 if (frmNews.ShowDialog() == DialogResult.OK)
                 {
-                    lstViewObjects.FullRowSelect = true;
-                    if (lstViewObjects.SelectedItems.Count > 0)
-                    {
-                        CheckFolderType();
-                        lstViewObjects.Items.Clear();
-                        PopulateListView();
-                    }
-                    else if (lstViewObjects.SelectedItems.Count <= 0)
-                    {
-                        EmptyFields();
-                        if (!tCtrlPreview.Controls.Contains(tabPage2))
-                            tCtrlPreview.Controls.Add(tabPage2);
-                    }
+                    HandleListViewSelection();
                 }
             }
         }
-        private void newsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void HandleListViewSelection()
         {
-            currentFilter = ClassIds.News;
-            FilterListViewByClass();
+            lstViewObjects.FullRowSelect = true;
+            if (lstViewObjects.SelectedItems.Count > 0)
+            {
+                CheckFolderType();
+                lstViewObjects.Items.Clear();
+                PopulateListView();
+            }
+            else if (lstViewObjects.SelectedItems.Count <= 0)
+            {
+                EmptyFields();
+                if (!tCtrlPreview.Controls.Contains(tabPage2))
+                    tCtrlPreview.Controls.Add(tabPage2);
+            }
         }
-        private void photosToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void newsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            currentFilter = ClassIds.Photo;
-            FilterListViewByClass();
+            List<ClassIds> classFilters = new List<ClassIds> { ClassIds.News };
+
+            currentFilter = classFilters;
+            lstViewObjects.Items.Clear();
+            lstViewObjects.Refresh();
+            if (radioBtnES.Checked)
+            {
+                await LoadObjFromElasticsearchAsync(classFilters);
+                return;
+            }
+            FilterListViewByClass(classFilters);
         }
-        private void FilterListViewByClass()
+        private async void photosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<ClassIds> classFilters = new List<ClassIds> { ClassIds.Photo };
+
+            currentFilter = classFilters;
+            lstViewObjects.Items.Clear();
+            lstViewObjects.Refresh();
+            if (radioBtnES.Checked)
+            {
+                await LoadObjFromElasticsearchAsync(classFilters);
+                return;
+            }
+            FilterListViewByClass(classFilters);
+
+        }
+        private void FilterListViewByClass(List<ClassIds> classFilters)
         {
             lstViewObjects.Items.Clear();
             EmptyFields();
             if (!tCtrlPreview.Controls.Contains(tabPage2))
                 tCtrlPreview.Controls.Add(tabPage2);
-            PopulateListView();
+            PopulateListView(classFilters);
         }
         private void contactToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var clscontact=new clsContact();
+            var clscontact = new clsContact();
             var contactForm = new frmContactProperties(clscontact);
             contactForm.ShowDialog();
         }
-
         private void contactsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var contactlist=new frmContactList();
+            var contactlist = new frmContactList();
             contactlist.ShowDialog();
         }
         private void sendToContactToolStripMenuItem_Click(object sender, EventArgs e)
@@ -350,6 +390,47 @@ namespace FileWorxClient
             else
             {
                 MessageBox.Show("No items selected.", "No Items", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        private async Task LoadObjFromElasticsearchAsync(List<ClassIds> classFilters)
+        {
+            clsFilesQuery fileQuery = new clsFilesQuery();
+            await fileQuery.RunES(classFilters);
+            List<clsFile> fileList = fileQuery.FileDataList;
+            foreach (clsFile file in fileList)
+            {
+                ListViewItem item = new ListViewItem(file.Name);
+                item.SubItems.Add(file.CreationDate.ToString());
+                item.SubItems.Add(file.Description);
+                Debug.WriteLine(file.GetType().Name);
+                if (file.Photo != null)
+                {
+                    item.Tag = $"Photos|{file.ID}";
+                }
+                else if (file.News != null)
+                {
+                    item.Tag = $"News|{file.ID}";
+                }
+                lstViewObjects.Items.Add(item);
+            }
+        }
+        private async void radioBtnES_CheckedChanged(object sender, EventArgs e)
+        {
+            List<ClassIds> classFilters = new List<ClassIds> { ClassIds.Photo ,ClassIds.News};
+            if (radioBtnES.Checked)
+            {
+                lstViewObjects.Items.Clear();
+                lstViewObjects.Refresh();
+                await LoadObjFromElasticsearchAsync(classFilters);
+            }
+        }
+        private void radioBtnDB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioBtnDB.Checked)
+            {
+                lstViewObjects.Items.Clear();
+                lstViewObjects.Refresh();
+                PopulateListView();
             }
         }
     }

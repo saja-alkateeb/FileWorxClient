@@ -31,24 +31,29 @@ namespace FileWorxClient
         {
             this.components = new System.ComponentModel.Container();
             this.spltContainer = new System.Windows.Forms.SplitContainer();
+            this.radioBtnES = new System.Windows.Forms.RadioButton();
+            this.radioBtnDB = new System.Windows.Forms.RadioButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCreate = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuNews = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuPhotos = new System.Windows.Forms.ToolStripMenuItem();
+            this.contactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuRelogin = new System.Windows.Forms.ToolStripMenuItem();
             this.filterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.photosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuUsers = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contactsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lstViewObjects = new System.Windows.Forms.ListView();
             this.Title = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.CreationDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Description = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Lastmodefier = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ctxContact = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendToContactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tCtrlPreview = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.rtbPreview = new System.Windows.Forms.RichTextBox();
@@ -60,10 +65,6 @@ namespace FileWorxClient
             this.cmboCategory = new System.Windows.Forms.ComboBox();
             this.txtCreationDate = new System.Windows.Forms.TextBox();
             this.txtTiltle = new System.Windows.Forms.TextBox();
-            this.contactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contactsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sendToContactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.spltContainer)).BeginInit();
             this.spltContainer.Panel1.SuspendLayout();
             this.spltContainer.Panel2.SuspendLayout();
@@ -89,6 +90,8 @@ namespace FileWorxClient
             // spltContainer.Panel1
             // 
             this.spltContainer.Panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.spltContainer.Panel1.Controls.Add(this.radioBtnES);
+            this.spltContainer.Panel1.Controls.Add(this.radioBtnDB);
             this.spltContainer.Panel1.Controls.Add(this.menuStrip1);
             this.spltContainer.Panel1.Controls.Add(this.lstViewObjects);
             // 
@@ -106,6 +109,30 @@ namespace FileWorxClient
             this.spltContainer.SplitterDistance = 342;
             this.spltContainer.SplitterWidth = 3;
             this.spltContainer.TabIndex = 0;
+            // 
+            // radioBtnES
+            // 
+            this.radioBtnES.AutoSize = true;
+            this.radioBtnES.Location = new System.Drawing.Point(97, 318);
+            this.radioBtnES.Name = "radioBtnES";
+            this.radioBtnES.Size = new System.Drawing.Size(93, 17);
+            this.radioBtnES.TabIndex = 19;
+            this.radioBtnES.TabStop = true;
+            this.radioBtnES.Text = "Elastic Search";
+            this.radioBtnES.UseVisualStyleBackColor = true;
+            this.radioBtnES.CheckedChanged += new System.EventHandler(this.radioBtnES_CheckedChanged);
+            // 
+            // radioBtnDB
+            // 
+            this.radioBtnDB.AutoSize = true;
+            this.radioBtnDB.Location = new System.Drawing.Point(12, 318);
+            this.radioBtnDB.Name = "radioBtnDB";
+            this.radioBtnDB.Size = new System.Drawing.Size(71, 17);
+            this.radioBtnDB.TabIndex = 18;
+            this.radioBtnDB.TabStop = true;
+            this.radioBtnDB.Text = "Database";
+            this.radioBtnDB.UseVisualStyleBackColor = true;
+            this.radioBtnDB.CheckedChanged += new System.EventHandler(this.radioBtnDB_CheckedChanged);
             // 
             // menuStrip1
             // 
@@ -144,16 +171,23 @@ namespace FileWorxClient
             // mnuNews
             // 
             this.mnuNews.Name = "mnuNews";
-            this.mnuNews.Size = new System.Drawing.Size(180, 22);
+            this.mnuNews.Size = new System.Drawing.Size(116, 22);
             this.mnuNews.Text = "News";
             this.mnuNews.Click += new System.EventHandler(this.mnuNews_Click);
             // 
             // mnuPhotos
             // 
             this.mnuPhotos.Name = "mnuPhotos";
-            this.mnuPhotos.Size = new System.Drawing.Size(180, 22);
+            this.mnuPhotos.Size = new System.Drawing.Size(116, 22);
             this.mnuPhotos.Text = "Photos";
             this.mnuPhotos.Click += new System.EventHandler(this.mnuPhotos_Click);
+            // 
+            // contactToolStripMenuItem
+            // 
+            this.contactToolStripMenuItem.Name = "contactToolStripMenuItem";
+            this.contactToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.contactToolStripMenuItem.Text = "Contact";
+            this.contactToolStripMenuItem.Click += new System.EventHandler(this.contactToolStripMenuItem_Click);
             // 
             // mnuRelogin
             // 
@@ -175,14 +209,14 @@ namespace FileWorxClient
             // newsToolStripMenuItem
             // 
             this.newsToolStripMenuItem.Name = "newsToolStripMenuItem";
-            this.newsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newsToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
             this.newsToolStripMenuItem.Text = "News";
             this.newsToolStripMenuItem.Click += new System.EventHandler(this.newsToolStripMenuItem_Click);
             // 
             // photosToolStripMenuItem
             // 
             this.photosToolStripMenuItem.Name = "photosToolStripMenuItem";
-            this.photosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.photosToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
             this.photosToolStripMenuItem.Text = "Photos";
             this.photosToolStripMenuItem.Click += new System.EventHandler(this.photosToolStripMenuItem_Click);
             // 
@@ -197,9 +231,24 @@ namespace FileWorxClient
             // mnuUsers
             // 
             this.mnuUsers.Name = "mnuUsers";
-            this.mnuUsers.Size = new System.Drawing.Size(180, 22);
+            this.mnuUsers.Size = new System.Drawing.Size(147, 22);
             this.mnuUsers.Text = "Users Settings";
             this.mnuUsers.Click += new System.EventHandler(this.mnuUsers_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contactsToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // contactsToolStripMenuItem
+            // 
+            this.contactsToolStripMenuItem.Name = "contactsToolStripMenuItem";
+            this.contactsToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
+            this.contactsToolStripMenuItem.Text = "Contacts";
+            this.contactsToolStripMenuItem.Click += new System.EventHandler(this.contactsToolStripMenuItem_Click);
             // 
             // lstViewObjects
             // 
@@ -209,14 +258,13 @@ namespace FileWorxClient
             this.lstViewObjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Title,
             this.CreationDate,
-            this.Description,
-            this.Lastmodefier});
+            this.Description});
             this.lstViewObjects.ContextMenuStrip = this.ctxContact;
             this.lstViewObjects.GridLines = true;
             this.lstViewObjects.HideSelection = false;
             this.lstViewObjects.Location = new System.Drawing.Point(0, 27);
             this.lstViewObjects.Name = "lstViewObjects";
-            this.lstViewObjects.Size = new System.Drawing.Size(507, 321);
+            this.lstViewObjects.Size = new System.Drawing.Size(507, 285);
             this.lstViewObjects.TabIndex = 16;
             this.lstViewObjects.UseCompatibleStateImageBehavior = false;
             this.lstViewObjects.View = System.Windows.Forms.View.Details;
@@ -237,11 +285,6 @@ namespace FileWorxClient
             this.Description.Text = "Description";
             this.Description.Width = 200;
             // 
-            // Lastmodefier
-            // 
-            this.Lastmodefier.Text = "Last modefier";
-            this.Lastmodefier.Width = 120;
-            // 
             // ctxContact
             // 
             this.ctxContact.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -254,9 +297,16 @@ namespace FileWorxClient
             // mnuDelete
             // 
             this.mnuDelete.Name = "mnuDelete";
-            this.mnuDelete.Size = new System.Drawing.Size(107, 22);
+            this.mnuDelete.Size = new System.Drawing.Size(157, 22);
             this.mnuDelete.Text = "Delete";
             this.mnuDelete.Click += new System.EventHandler(this.mnuDelete2_Click);
+            // 
+            // sendToContactToolStripMenuItem
+            // 
+            this.sendToContactToolStripMenuItem.Name = "sendToContactToolStripMenuItem";
+            this.sendToContactToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.sendToContactToolStripMenuItem.Text = "Send to contact";
+            this.sendToContactToolStripMenuItem.Click += new System.EventHandler(this.sendToContactToolStripMenuItem_Click);
             // 
             // tCtrlPreview
             // 
@@ -268,7 +318,7 @@ namespace FileWorxClient
             this.tCtrlPreview.Location = new System.Drawing.Point(3, 97);
             this.tCtrlPreview.Name = "tCtrlPreview";
             this.tCtrlPreview.SelectedIndex = 0;
-            this.tCtrlPreview.Size = new System.Drawing.Size(502, 222);
+            this.tCtrlPreview.Size = new System.Drawing.Size(502, 224);
             this.tCtrlPreview.TabIndex = 16;
             // 
             // tabPage1
@@ -277,7 +327,7 @@ namespace FileWorxClient
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(494, 196);
+            this.tabPage1.Size = new System.Drawing.Size(494, 198);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Preview";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -300,7 +350,7 @@ namespace FileWorxClient
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(494, 196);
+            this.tabPage2.Size = new System.Drawing.Size(494, 198);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Image";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -386,35 +436,6 @@ namespace FileWorxClient
             this.txtTiltle.Size = new System.Drawing.Size(409, 20);
             this.txtTiltle.TabIndex = 5;
             // 
-            // contactToolStripMenuItem
-            // 
-            this.contactToolStripMenuItem.Name = "contactToolStripMenuItem";
-            this.contactToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.contactToolStripMenuItem.Text = "Contact";
-            this.contactToolStripMenuItem.Click += new System.EventHandler(this.contactToolStripMenuItem_Click);
-            // 
-            // viewToolStripMenuItem
-            // 
-            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contactsToolStripMenuItem});
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
-            // 
-            // contactsToolStripMenuItem
-            // 
-            this.contactsToolStripMenuItem.Name = "contactsToolStripMenuItem";
-            this.contactsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.contactsToolStripMenuItem.Text = "Contacts";
-            this.contactsToolStripMenuItem.Click += new System.EventHandler(this.contactsToolStripMenuItem_Click);
-            // 
-            // sendToContactToolStripMenuItem
-            // 
-            this.sendToContactToolStripMenuItem.Name = "sendToContactToolStripMenuItem";
-            this.sendToContactToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.sendToContactToolStripMenuItem.Text = "Send to contact";
-            this.sendToContactToolStripMenuItem.Click += new System.EventHandler(this.sendToContactToolStripMenuItem_Click);
-            // 
             // frmFILEWORX
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -422,7 +443,7 @@ namespace FileWorxClient
             this.ClientSize = new System.Drawing.Size(508, 656);
             this.Controls.Add(this.spltContainer);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(60, 47);
+            this.MinimumSize = new System.Drawing.Size(500, 500);
             this.Name = "frmFILEWORX";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FILEWORX";
@@ -473,7 +494,6 @@ namespace FileWorxClient
         private System.Windows.Forms.ContextMenuStrip ctxContact;
         private System.Windows.Forms.ToolStripMenuItem mnuDelete;
         private System.Windows.Forms.ToolStripMenuItem mnuUsers;
-        private System.Windows.Forms.ColumnHeader Lastmodefier;
         public System.Windows.Forms.ListView lstViewObjects;
         private System.Windows.Forms.ToolStripMenuItem filterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newsToolStripMenuItem;
@@ -482,5 +502,7 @@ namespace FileWorxClient
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem contactsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sendToContactToolStripMenuItem;
+        private System.Windows.Forms.RadioButton radioBtnDB;
+        private System.Windows.Forms.RadioButton radioBtnES;
     }
 }

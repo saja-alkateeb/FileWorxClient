@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
+using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FileWorxServer
@@ -8,6 +11,7 @@ namespace FileWorxServer
         public string UserName { get; set; }
         public string Password { get; set; }
         public bool IsAdmin { get; set; }
+        private readonly ElasticsearchClient _client = new clsElasticsearchClientFactory().CreateClient();
         public override short Insert()
         {
             try
@@ -48,12 +52,11 @@ namespace FileWorxServer
         {
             string SQLCommand = $"SELECT ID FROM T_User WHERE Password='{password}'";
             string[,] queryResArray = null;
-            int maxRows = 100;
-            short maxColumns = 100;
-            dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns, 1, 1);
+            int maxRows = 0;
+            short maxColumns = 0;
+            dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
             ID = queryResArray[1, 1];
             return ID;
-
         }
         public bool IsLoginValid(string username, string password)
         {
@@ -80,41 +83,16 @@ namespace FileWorxServer
             return false;
 
         }//IsLoginValid
-        public string GetUserNameByID(string userID)
-        {
-            try
-            {
-                string SQLCommand = $"SELECT UserName FROM T_User WHERE ID = '{userID}'";
-                string[,] queryResArray = null;
-                int maxRows = 0;
-                short maxColumns = 0;
-                dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
-
-                if (maxRows > 0)
-                {
-                    return queryResArray[1, 1];
-                }
-                else
-                {
-                    return "Unknown User";
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error occurred while getting user name: " + ex.Message);
-                return "Error";
-            }
-        }//GetUserNameByID
         public override short Read()
         {
             base.Read();
             string SQLCommand = $"SELECT UserName, Password FROM T_User WHERE ID='{ID}'";
             string[,] queryResArray = null;
-            int maxRows = 10;
-            short maxColumns = 10;
+            int maxRows = 0;
+            short maxColumns = 0;
             try
             {
-                short status=dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns, 1, 1);
+                short status=dBConn.GetSQLData(SQLCommand, ref queryResArray, ref maxRows, ref maxColumns);
                 UserName = queryResArray[1, 1];
                 Password = queryResArray[1, 2];
                 return status;
@@ -125,11 +103,9 @@ namespace FileWorxServer
                 return -1;
             }
         }//Read
-
         public override short Update()
         {
             base.Update();
-
             string SQLCommand = $"UPDATE T_User SET UserName='{UserName}' WHERE ID = '{ID}'";
             try
             {
@@ -143,7 +119,47 @@ namespace FileWorxServer
             }
 
         }//Update
+        public async Task<bool> UpdateUserInElasticsearchAsync(clsUser user)
+        {
+            var response = await _client.UpdateAsync<clsUser, clsUser>("my-user-index", user.ID, u => u
+                .Doc(user));
 
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during update: ");
+                return false;
+            }
+        }
+        public async Task<bool> DeleteUserFromElasticsearchAsync(string userId)
+        {
+            var response = await _client.DeleteAsync("my-user-index", userId);
 
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during delete: ");
+                return false;
+            }
+        }
+        public async Task<bool> InsertUserInElasticsearchAsync(clsUser user)
+        {
+            var response = await _client.IndexAsync(user, "my-user-index");
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during insert: ");
+                return false;
+            }
+        }
     }
 }

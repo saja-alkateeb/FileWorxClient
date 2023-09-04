@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
+using Elastic.Clients.Elasticsearch.QueryDsl;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
 namespace FileWorxServer
 {
     public class clsNews : clsFile
     {
         public string Category { get; set; }
         string separator = Constants.Separator;
+        private readonly ElasticsearchClient _client = new clsElasticsearchClientFactory().CreateClient();
         public override short Read()
         {
             base.Read();
@@ -53,7 +62,6 @@ namespace FileWorxServer
                 Console.WriteLine("Error occurred during update: " + ex.Message);
                 return -1;
             }
-
         }//Update
         public void AddNewsToFile(string content, string fileName)
         {
@@ -69,8 +77,49 @@ namespace FileWorxServer
             ID = Guid.NewGuid().ToString();
             FileName = fileName;
             Insert();
-            
         }
+        public async Task<bool> UpdateNewsInElasticsearchAsync(clsNews news)
+        {
+            var response = await _client.UpdateAsync<clsNews, clsNews>("my-news-index", news.ID, u => u
+                .Doc(news));
 
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during update: ");
+                return false;
+            }
+        }
+        public async Task<bool> DeleteNewsFromElasticsearchAsync(string newsId)
+        {
+            var response = await _client.DeleteAsync("my-news-index", newsId);
+
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during delete: ");
+                return false    ;
+            }
+        }
+        public async Task<bool> InsertNewsInElasticsearchAsync(clsNews news)
+        {
+            var response = await _client.IndexAsync(news, "my-news-index");
+
+            if (response.IsValidResponse)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Error occurred during insert: ");
+                return false;
+            }
+        }
     }
 }

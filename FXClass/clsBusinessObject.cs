@@ -5,6 +5,7 @@ namespace FileWorxServer
 {
     public class clsBusinessObject
     {
+        private clsUser user;
         public string ID { get; set; }
         public string Description { get; set; }
         public string Name { get; set; }
@@ -12,6 +13,7 @@ namespace FileWorxServer
         public DateTime LastModificationDate { get; set; }
         public int ClassID { get; set; }
         public string LastModifier { get; set; }
+       // public clsUser LastModifier { get; set; }
         public readonly DBConnNET4.clsDBConnection dBConn;
         public string Creator { get; set; }
         public clsBusinessObject()
@@ -43,7 +45,7 @@ namespace FileWorxServer
         }//Read
         public virtual short Insert()
         {
-            string SQLCommand = $"INSERT INTO T_BusinessObject(ID, C_Description, C_CreationDate, C_ClassID, C_NAME, Creator) VALUES ('{ID}', '{Description}', '{CreationDate}', '{ClassID}', '{Name}', '{Creator}')";
+            string SQLCommand = $"INSERT INTO T_BusinessObject(ID, C_Description, C_CreationDate, C_ClassID, C_NAME, Creator,LastModifier) VALUES ('{ID}', '{Description}', '{CreationDate}', '{ClassID}', '{Name}', '{Creator}','{LastModifier}')";
             try
             {
                 short status = dBConn.RunSQLCommand(SQLCommand);
@@ -61,7 +63,7 @@ namespace FileWorxServer
             try
             {
                short status= dBConn.RunSQLCommand(SQLCommand);
-                return status;
+               return status;
             }
             catch (Exception ex)
             {

@@ -36,6 +36,8 @@
             this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.btnCreare = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
+            this.radioBtnDB = new System.Windows.Forms.RadioButton();
+            this.radioBtnES = new System.Windows.Forms.RadioButton();
             this.ctxUsers.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,11 +51,11 @@
             this.columnHeader2});
             this.lstViewUsers.ContextMenuStrip = this.ctxUsers;
             this.lstViewUsers.HideSelection = false;
-            this.lstViewUsers.Location = new System.Drawing.Point(-1, 10);
+            this.lstViewUsers.Location = new System.Drawing.Point(-2, 11);
             this.lstViewUsers.Margin = new System.Windows.Forms.Padding(2);
             this.lstViewUsers.MultiSelect = false;
             this.lstViewUsers.Name = "lstViewUsers";
-            this.lstViewUsers.Size = new System.Drawing.Size(453, 158);
+            this.lstViewUsers.Size = new System.Drawing.Size(456, 169);
             this.lstViewUsers.TabIndex = 0;
             this.lstViewUsers.UseCompatibleStateImageBehavior = false;
             this.lstViewUsers.View = System.Windows.Forms.View.Details;
@@ -87,8 +89,8 @@
             // 
             // btnCreare
             // 
-            this.btnCreare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCreare.Location = new System.Drawing.Point(12, 173);
+            this.btnCreare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCreare.Location = new System.Drawing.Point(298, 183);
             this.btnCreare.Name = "btnCreare";
             this.btnCreare.Size = new System.Drawing.Size(75, 30);
             this.btnCreare.TabIndex = 1;
@@ -99,7 +101,7 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(366, 173);
+            this.btnClose.Location = new System.Drawing.Point(379, 183);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 30);
             this.btnClose.TabIndex = 2;
@@ -107,14 +109,43 @@
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
+            // radioBtnDB
+            // 
+            this.radioBtnDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.radioBtnDB.AutoSize = true;
+            this.radioBtnDB.Location = new System.Drawing.Point(2, 190);
+            this.radioBtnDB.Name = "radioBtnDB";
+            this.radioBtnDB.Size = new System.Drawing.Size(71, 17);
+            this.radioBtnDB.TabIndex = 3;
+            this.radioBtnDB.TabStop = true;
+            this.radioBtnDB.Text = "Database";
+            this.radioBtnDB.UseVisualStyleBackColor = true;
+            this.radioBtnDB.CheckedChanged += new System.EventHandler(this.radioBtnDB_CheckedChanged);
+            // 
+            // radioBtnES
+            // 
+            this.radioBtnES.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.radioBtnES.AutoSize = true;
+            this.radioBtnES.Location = new System.Drawing.Point(73, 190);
+            this.radioBtnES.Name = "radioBtnES";
+            this.radioBtnES.Size = new System.Drawing.Size(93, 17);
+            this.radioBtnES.TabIndex = 4;
+            this.radioBtnES.TabStop = true;
+            this.radioBtnES.Text = "Elastic Search";
+            this.radioBtnES.UseVisualStyleBackColor = true;
+            this.radioBtnES.CheckedChanged += new System.EventHandler(this.radioBtnES_CheckedChanged);
+            // 
             // frmUsersInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(453, 210);
+            this.ClientSize = new System.Drawing.Size(453, 219);
+            this.Controls.Add(this.radioBtnES);
+            this.Controls.Add(this.radioBtnDB);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnCreare);
             this.Controls.Add(this.lstViewUsers);
+            this.MinimumSize = new System.Drawing.Size(469, 258);
             this.Name = "frmUsersInfo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Users Information";
@@ -122,6 +153,7 @@
             this.Load += new System.EventHandler(this.frmUsersInfo_Load);
             this.ctxUsers.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -134,5 +166,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuDelete;
         private System.Windows.Forms.Button btnCreare;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.RadioButton radioBtnDB;
+        private System.Windows.Forms.RadioButton radioBtnES;
     }
 }

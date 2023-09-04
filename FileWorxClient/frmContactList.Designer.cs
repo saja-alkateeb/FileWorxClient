@@ -37,6 +37,8 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
             this.ReceiveTimer = new System.Windows.Forms.Timer(this.components);
+            this.radioBtnDB = new System.Windows.Forms.RadioButton();
+            this.radioBtnES = new System.Windows.Forms.RadioButton();
             this.ctxContact.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,6 +59,8 @@
             this.lstContact.TabIndex = 0;
             this.lstContact.UseCompatibleStateImageBehavior = false;
             this.lstContact.View = System.Windows.Forms.View.Details;
+            this.lstContact.SelectedIndexChanged += new System.EventHandler(this.lstContact_SelectedIndexChanged);
+            this.lstContact.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lstContact_MouseDoubleClick);
             // 
             // columnHeader1
             // 
@@ -110,11 +114,39 @@
             this.ReceiveTimer.Interval = 10;
             this.ReceiveTimer.Tick += new System.EventHandler(this.ReceiveTimer_Tick_1);
             // 
+            // radioBtnDB
+            // 
+            this.radioBtnDB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.radioBtnDB.AutoSize = true;
+            this.radioBtnDB.Location = new System.Drawing.Point(3, 275);
+            this.radioBtnDB.Name = "radioBtnDB";
+            this.radioBtnDB.Size = new System.Drawing.Size(71, 17);
+            this.radioBtnDB.TabIndex = 3;
+            this.radioBtnDB.TabStop = true;
+            this.radioBtnDB.Text = "Database";
+            this.radioBtnDB.UseVisualStyleBackColor = true;
+            this.radioBtnDB.CheckedChanged += new System.EventHandler(this.radioBtnDB_CheckedChanged);
+            // 
+            // radioBtnES
+            // 
+            this.radioBtnES.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.radioBtnES.AutoSize = true;
+            this.radioBtnES.Location = new System.Drawing.Point(94, 275);
+            this.radioBtnES.Name = "radioBtnES";
+            this.radioBtnES.Size = new System.Drawing.Size(93, 17);
+            this.radioBtnES.TabIndex = 4;
+            this.radioBtnES.TabStop = true;
+            this.radioBtnES.Text = "Elastic Search";
+            this.radioBtnES.UseVisualStyleBackColor = true;
+            this.radioBtnES.CheckedChanged += new System.EventHandler(this.radioBtnES_CheckedChanged);
+            // 
             // frmContactList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(487, 311);
+            this.Controls.Add(this.radioBtnES);
+            this.Controls.Add(this.radioBtnDB);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lstContact);
@@ -125,6 +157,7 @@
             this.Load += new System.EventHandler(this.frmContactList_Load);
             this.ctxContact.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -138,5 +171,7 @@
         private System.Windows.Forms.ContextMenuStrip ctxContact;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.Timer ReceiveTimer;
+        private System.Windows.Forms.RadioButton radioBtnDB;
+        private System.Windows.Forms.RadioButton radioBtnES;
     }
 }
